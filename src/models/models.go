@@ -4,9 +4,8 @@ import (
 	"math/big"
 	"time"
 
-	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/storage"
-
 	"github.com/ethereum/go-ethereum/common"
+	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/storage"
 )
 
 // ServiceConfig contains configurations for rest-api service.
@@ -109,6 +108,12 @@ type TssConfig struct {
 type RelayerConfig struct {
 	Address common.Address
 }
+
+// // ResourceID
+// type ResourceId struct {
+// 	Name string
+// 	ID   string
+// }
 
 // type PriceConfig struct {
 // 	Name string

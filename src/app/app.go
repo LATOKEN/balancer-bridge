@@ -7,6 +7,7 @@ import (
 
 	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/models"
 	rlr "gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service"
+	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/storage"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -24,13 +25,13 @@ type App struct {
 
 // NewApp is initializes the app
 func NewApp(logger *logrus.Logger, addr string, db *gorm.DB,
-	laCfg, posCfg, bscCfg, ethCfg *models.WorkerConfig, fetCfg *models.FetcherConfig) *App {
+	laCfg, posCfg, bscCfg, ethCfg *models.WorkerConfig, fetCfg *models.FetcherConfig, resourceIDs []*storage.ResourceId) *App {
 	// create new app
 	inst := &App{
 		logger:  logger,
 		router:  mux.NewRouter(),
 		server:  &http.Server{Addr: addr},
-		relayer: rlr.CreateNewBridgeSRV(logger, db, laCfg, posCfg, bscCfg, ethCfg, fetCfg),
+		relayer: rlr.CreateNewBridgeSRV(logger, db, laCfg, posCfg, bscCfg, ethCfg, fetCfg, resourceIDs),
 	}
 	// set router
 	inst.router = mux.NewRouter()

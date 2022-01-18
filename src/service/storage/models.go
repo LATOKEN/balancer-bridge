@@ -21,6 +21,7 @@ type TxLog struct {
 	OriginСhainID      string      `gorm:"type:TEXT"`
 	DestinationChainID string      `gorm:"type:TEXT"`
 	ReceiverAddr       string      `gorm:"type:TEXT"`
+	ResourceID         string      `gorm:"type:TEXT"`
 	BlockHash          string      `gorm:"type:TEXT"`
 	Height             int64       `gorm:"type:BIGINT"`
 	Status             TxLogStatus `gorm:"type:tx_log_statuses"`
@@ -34,17 +35,17 @@ type TxLog struct {
 
 // Event ...
 type Event struct {
-	ID                 int64
 	EventID            string
-	Type               EventStatus
 	ChainID            string
 	DestinationChainID string
 	OriginChainID      string
 	ReceiverAddr       string
 	InAmount           string
+	ResourceID         string
 	OutAmount          uint64
 	Height             int64
 	Status             EventStatus
+	DepositNonce       int64 `gorm:"primaryKey"`
 	CreateTime         int64
 	UpdateTime         int64
 	TxType             string
@@ -67,4 +68,9 @@ type PriceLog struct {
 	Name       string `gorm:"primaryKey"`
 	Price      string `gorm:"type:TEXT"`
 	UpdateTime int64  `json:"update_time" gorm:"type:BIGINT"`
+}
+
+type ResourceId struct {
+	Name string `gorm:"primaryKey"`
+	ID   string `gorm:"type:TEXT"`
 }

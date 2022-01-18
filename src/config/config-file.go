@@ -67,3 +67,14 @@ func (v *viperConfig) ReadFetcherConfig() *models.FetcherConfig {
 		AllTokens: v.GetStringSlice("all_tokens"),
 	}
 }
+
+func (v *viperConfig) ReadResourceIDs(fetcher *models.FetcherConfig) []*storage.ResourceId {
+	resouceIDs := make([]*storage.ResourceId, len(fetcher.AllTokens))
+	for index, name := range fetcher.AllTokens {
+		resouceIDs[index] = &storage.ResourceId{
+			Name: name,
+			ID:   v.GetString(fmt.Sprintf("resourceIDs.%s", name)),
+		}
+	}
+	return resouceIDs
+}

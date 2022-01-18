@@ -29,7 +29,7 @@ func CreateNewFetcherSrv(logger *logrus.Logger, db *storage.DataBase, cfg *model
 }
 
 func (f *FetcherSrv) Run() {
-	f.logger.Infoln("Fetcher srv")
+	f.logger.Infoln("Fetcher srv started")
 	go f.collector()
 }
 

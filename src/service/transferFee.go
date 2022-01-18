@@ -3,6 +3,7 @@ package rlr
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/storage"
@@ -40,19 +41,12 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 	}
 	//convert other native to corresponding latoken amount
 	latokenPrice, _ := strconv.ParseFloat(r.GetPriceOfToken("latoken"), 32)
-	var otherChainPrice float64
-	switch event.ChainID {
-	case storage.EthChain:
-		otherChainPrice, _ = strconv.ParseFloat(r.GetPriceOfToken("ethereum"), 32)
-	case storage.BscChain:
-		otherChainPrice, _ = strconv.ParseFloat(r.GetPriceOfToken("binancecoin"), 32)
-	case storage.PosChain:
-		otherChainPrice, _ = strconv.ParseFloat(r.GetPriceOfToken("matic-network"), 32)
-	}
+	swappedToken := r.storage.FetchResourceID(strings.ToLower(event.ResourceID))
+	otherChainPrice, _ := strconv.ParseFloat(r.GetPriceOfToken(swappedToken.Name), 32)
 	inamount, _ := strconv.ParseFloat(event.InAmount, 32)
 	event.OutAmount = uint64(inamount * otherChainPrice / latokenPrice)
 
-	r.logger.Infof("Fee Transfer parameters: outAmount(%s) | recipient(%s) | chainID(%s)\n",
+	r.logger.Infof("Fee Transfer parameters: outAmount(%d) | recipient(%s) | chainID(%s)\n",
 		event.OutAmount, event.ReceiverAddr, worker.GetChainName())
 	txHash, err = worker.TransferExtraFee(event.ReceiverAddr, event.OutAmount)
 	if err != nil {

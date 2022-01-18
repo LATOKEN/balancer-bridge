@@ -23,6 +23,7 @@ func main() {
 	fetCfg := cfg.ReadFetcherConfig()
 	dbConfig := cfg.ReadDBConfig()
 	dbURL := fmt.Sprintf(dbConfig.URL, dbConfig.DBHOST, dbConfig.DBPORT, dbConfig.DBUser, dbConfig.DBName, dbConfig.DBPassword, dbConfig.DBSSL)
+	resourceIDs := cfg.ReadResourceIDs(fetCfg)
 	// init logrus logger
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.TextFormatter{
@@ -55,7 +56,7 @@ func main() {
 		cancel()
 	}()
 
-	app := app.NewApp(logger, srvURL, db, laCfg, posCfg, bscCfg, ethCfg, fetCfg)
+	app := app.NewApp(logger, srvURL, db, laCfg, posCfg, bscCfg, ethCfg, fetCfg, resourceIDs)
 
 	//run App
 	app.Run(ctx)

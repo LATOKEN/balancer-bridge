@@ -28,7 +28,7 @@ type BridgeSRV struct {
 }
 
 // CreateNewBridgeSRV ...
-func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig, posCfg, bscCfg, ethCfg *models.WorkerConfig, fetCfg *models.FetcherConfig) *BridgeSRV {
+func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig, posCfg, bscCfg, ethCfg *models.WorkerConfig, fetCfg *models.FetcherConfig, resourceIDs []*storage.ResourceId) *BridgeSRV {
 	// init database
 	db, err := storage.InitStorage(gormDB)
 	if err != nil {
@@ -56,7 +56,7 @@ func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig, posCfg
 	}
 	inst.Watcher = watcher.CreateNewWatcherSRV(logger, db, inst.Workers)
 	inst.Fetcher = fetcher.CreateNewFetcherSrv(logger, db, fetCfg)
-
+	db.SaveResourceIDs(resourceIDs)
 	return &inst
 }
 
@@ -99,6 +99,7 @@ func (r *BridgeSRV) ConfirmWorkerTx(worker workers.IWorker) {
 					DestinationChainID: txLog.DestinationChainID,
 					OriginChainID:      txLog.OriginСhainID,
 					InAmount:           txLog.InAmount,
+					ResourceID:         txLog.ResourceID,
 					Height:             txLog.Height,
 					Status:             storage.EventStatusFeeTransferInitConfrimed,
 					CreateTime:         time.Now().Unix(),

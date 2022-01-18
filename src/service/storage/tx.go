@@ -8,7 +8,7 @@ import (
 
 // GetConfirmedTxsLog ...
 func (d *DataBase) GetConfirmedTxsLog(chain string, event *Event, tx *gorm.DB) (txLogs []*TxLog, err error) {
-	query := tx.Where("chain = ? and status = ? and event_id = ?", chain, TxStatusConfirmed, event.ID)
+	query := tx.Where("chain = ? and status = ? and event_id = ?", chain, TxStatusConfirmed, event.DepositNonce)
 	if err := query.Order("id desc").Find(&txLogs).Error; err != nil {
 		return txLogs, err
 	}

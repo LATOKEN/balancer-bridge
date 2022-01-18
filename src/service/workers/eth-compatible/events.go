@@ -23,13 +23,15 @@ const (
 )
 
 var (
-	ExtraFeeEventHash = common.HexToHash("0xac4619eda7a5583d586072607ccbcff24908b067d39a59e2ebcdf3509aa65d2e")
+	ExtraFeeEventHash = common.HexToHash("0x525223e7c9e63747e47dd4558940766054da3d0378f4006848d2a201545f55a4")
 )
 
 // ExtraFeeSupplied represents a ExtraFeeSupplied event raised by the Bridge.sol contract.
 type ExtraFeeSupplied struct {
 	OriginChainID      [8]byte
 	DestinationChainID [8]byte
+	DepositNonce       uint64
+	ResourceID         [32]byte
 	RecipientAddress   common.Address
 	Amount             *big.Int
 	Raw                types.Log // Blockchain specific contextual infos
@@ -44,7 +46,9 @@ func ParseLAExtraFeeSupplied(abi *abi.ABI, log *types.Log) (ContractEvent, error
 	fmt.Printf("ExtraFeeSupplied\n")
 	fmt.Printf("origin chain ID: 0x%s\n", common.Bytes2Hex(ev.OriginChainID[:]))
 	fmt.Printf("destination chain ID: 0x%s\n", common.Bytes2Hex(ev.DestinationChainID[:]))
-	fmt.Printf("amount: ", ev.Amount.String())
+	fmt.Printf("amount: %s\n", ev.Amount.String())
+	fmt.Printf("resourceID: %s\n", common.Bytes2Hex(ev.ResourceID[:]))
+	fmt.Printf("nonce: %d\n", ev.DepositNonce)
 
 	return ev, nil
 }
@@ -60,6 +64,8 @@ func (ev ExtraFeeSupplied) ToTxLog(chain string) *storage.TxLog {
 		InAmount:           ev.Amount.String(),
 		DestinationChainID: common.Bytes2Hex(ev.DestinationChainID[:]),
 		OriginСhainID:      common.Bytes2Hex(ev.OriginChainID[:]),
+		ResourceID:         common.Bytes2Hex(ev.ResourceID[:]),
+		DepositNonce:       ev.DepositNonce,
 	}
 	return txlog
 }
