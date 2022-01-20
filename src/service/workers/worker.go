@@ -3,6 +3,7 @@ package workers
 import (
 	"time"
 
+	"github.com/ethereum/go-ethereum/common"
 	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/models"
 	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/storage"
 )
@@ -34,4 +35,8 @@ type IWorker interface {
 
 	//TransferExtraFee to be called on lachain side to transfer
 	TransferExtraFee(receiptAddr string, amount uint64) (string, error)
+
+	CreateMessageHash(amount, recipientAddress, originChainID string) (common.Hash, error)
+
+	CreateSignature(messageHash common.Hash) (string, error)
 }

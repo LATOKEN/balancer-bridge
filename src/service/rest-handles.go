@@ -1,6 +1,7 @@
 package rlr
 
 import (
+	"github.com/ethereum/go-ethereum/common"
 	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/models"
 )
 
@@ -26,7 +27,20 @@ func (r *BridgeSRV) StatusOfWorkers() (map[string]*models.WorkerStatus, error) {
 }
 
 //GetPriceOfToken
-func (r *BridgeSRV) GetPriceOfToken(name string) (price string) {
-	priceLog := r.storage.GetPriceLog(name)
-	return priceLog.Price
+func (r *BridgeSRV) GetPriceOfToken(name string) (string, error) {
+	priceLog, err := r.storage.GetPriceLog(name)
+	if err != nil {
+		return "", err
+	}
+	return priceLog.Price, nil
+}
+
+//Create signature and hash
+func (r *BridgeSRV) CreateSignature(amount, recipientAddress, originChainID string) (messageHash common.Hash, signature string, err error) {
+	messageHash, err = r.laWorker.CreateMessageHash(amount, recipientAddress, originChainID)
+	signature, err = r.laWorker.CreateSignature(messageHash)
+	if err != nil {
+		return common.Hash{}, "", err
+	}
+	return messageHash, signature, nil
 }

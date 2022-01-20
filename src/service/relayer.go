@@ -46,8 +46,6 @@ func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig, posCfg
 	inst.Workers[storage.PosChain] = eth.NewErc20Worker(logger, posCfg)
 	inst.Workers[storage.BscChain] = eth.NewErc20Worker(logger, bscCfg)
 	inst.Workers[storage.EthChain] = eth.NewErc20Worker(logger, ethCfg)
-	// create la worker
-	inst.Workers[storage.LaChain] = inst.laWorker
 
 	// check rules for workers(>=2, different chainIDs...)
 	if len(inst.Workers) < 1 {
@@ -56,6 +54,10 @@ func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig, posCfg
 	}
 	inst.Watcher = watcher.CreateNewWatcherSRV(logger, db, inst.Workers)
 	inst.Fetcher = fetcher.CreateNewFetcherSrv(logger, db, fetCfg)
+
+	// create la worker
+	inst.Workers[storage.LaChain] = inst.laWorker
+
 	db.SaveResourceIDs(resourceIDs)
 	return &inst
 }
