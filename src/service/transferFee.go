@@ -40,9 +40,11 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 		CreateTime: time.Now().Unix(),
 	}
 	//convert other native to corresponding latoken amount
-	latokenPrice, _ := strconv.ParseFloat(r.GetPriceOfToken("latoken"), 32)
+	lpStr, _ := r.GetPriceOfToken("latoken")
+	latokenPrice, _ := strconv.ParseFloat(lpStr, 32)
 	swappedToken := r.storage.FetchResourceID(strings.ToLower(event.ResourceID))
-	otherChainPrice, _ := strconv.ParseFloat(r.GetPriceOfToken(swappedToken.Name), 32)
+	spStr, _ := r.GetPriceOfToken(swappedToken.Name)
+	otherChainPrice, _ := strconv.ParseFloat(spStr, 32)
 	inamount, _ := strconv.ParseFloat(event.InAmount, 32)
 	event.OutAmount = uint64(inamount * otherChainPrice / latokenPrice)
 
