@@ -2,7 +2,7 @@ package storage
 
 func (d *DataBase) SavePriceInformation(priceLogs []*PriceLog) {
 	for _, priceLog := range priceLogs {
-		previousLog := d.GetPriceLog(priceLog.Name)
+		previousLog, _ := d.GetPriceLog(priceLog.Name)
 		if previousLog.UpdateTime == 0 {
 			if e := d.savePrice(priceLog); e != nil {
 				continue
@@ -15,9 +15,12 @@ func (d *DataBase) SavePriceInformation(priceLogs []*PriceLog) {
 	}
 }
 
-func (d *DataBase) GetPriceLog(name string) (priceLog PriceLog) {
-	d.db.Model(PriceLog{}).Where("name = ?", name).Order("update_time desc").First(&priceLog)
-	return priceLog
+func (d *DataBase) GetPriceLog(name string) (priceLog PriceLog, err error) {
+	err = d.db.Model(PriceLog{}).Where("name = ?", name).Order("update_time desc").First(&priceLog).Error
+	if err != nil {
+		return priceLog, err
+	}
+	return priceLog, nil
 }
 
 func (d *DataBase) updatePrice(priceLog *PriceLog) error {
