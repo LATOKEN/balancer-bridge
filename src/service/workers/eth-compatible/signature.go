@@ -10,10 +10,10 @@ import (
 	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/workers/utils"
 )
 
-func (w *Erc20Worker) CreateMessageHash(amount, recipientAddress, originChainID string) (common.Hash, error) {
+func (w *Erc20Worker) CreateMessageHash(amount, recipientAddress, destinationChainID string) (common.Hash, error) {
 	uint256Ty, _ := abi.NewType("uint256", "uint256", nil)
 	addressTy, _ := abi.NewType("address", "address", nil)
-	bytesTy, _ := abi.NewType("bytes", "bytes", nil)
+	bytesTy, _ := abi.NewType("bytes8", "bytes8", nil)
 
 	arguments := abi.Arguments{
 		{
@@ -25,24 +25,16 @@ func (w *Erc20Worker) CreateMessageHash(amount, recipientAddress, originChainID 
 		{
 			Type: bytesTy,
 		},
-		{
-			Type: uint256Ty,
-		},
 	}
 	value, _ := new(big.Int).SetString(amount, 10)
 	bytes, err := arguments.Pack(
 		value,
 		common.HexToAddress(recipientAddress),
-		[]byte(originChainID),
-		big.NewInt(w.signatureNonce),
+		utils.StringToBytes8(destinationChainID),
 	)
 	if err != nil {
 		return common.Hash{}, err
 	}
-
-	//increase signature nonce so no signature is same
-	w.signatureNonce++
-
 	messageHash := crypto.Keccak256Hash(bytes)
 	return messageHash, nil
 }
@@ -52,10 +44,11 @@ func (w *Erc20Worker) CreateSignature(messageHash common.Hash) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	println(messageHash.String())
 	signature, er := crypto.Sign(messageHash.Bytes(), privKey)
 	if er != nil {
 		return "", er
 	}
-
+	signature[64] = signature[64] + 35 + byte(w.chainID)*2
 	return hexutil.Encode(signature), nil
 }

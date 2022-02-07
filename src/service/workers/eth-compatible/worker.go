@@ -34,7 +34,6 @@ type Erc20Worker struct {
 	config             *models.WorkerConfig
 	client             *ethclient.Client
 	contractAddr       common.Address
-	signatureNonce     int64
 }
 
 // NewErc20Worker ...
@@ -74,7 +73,6 @@ func NewErc20Worker(logger *logrus.Logger, cfg *models.WorkerConfig) *Erc20Worke
 		config:             cfg,
 		client:             client,
 		contractAddr:       cfg.ContractAddr,
-		signatureNonce:     0,
 	}
 }
 

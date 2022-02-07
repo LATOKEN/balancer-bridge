@@ -17,7 +17,7 @@ func (a *App) Endpoints(w http.ResponseWriter, r *http.Request) {
 		Endpoints: []string{
 			"/price/{token}",
 			"/status",
-			"signature/{amount}/{recipientAddress}/{originChainID}",
+			"signature/{amount}/{recipientAddress}/{destinationChainID}",
 			// "/failed_swaps/{page}",
 			// "/resend_tx/{id}",
 			// "/set_mode/{mode}",
@@ -58,22 +58,18 @@ func (a *App) PriceHandler(w http.ResponseWriter, r *http.Request) {
 func (a *App) SignatureHandler(w http.ResponseWriter, r *http.Request) {
 	amount := mux.Vars(r)["amount"]
 	recipientAddress := mux.Vars(r)["recipientAddress"]
-	originChainID := mux.Vars(r)["originChainID"]
+	destinationChainID := mux.Vars(r)["destinationChainID"]
 
-	if amount == "" || recipientAddress == "" || originChainID == "" {
-		a.logger.Errorf("Empty Request (/signature/{amount}/{recipient}/{originChainID})")
+	if amount == "" || recipientAddress == "" || destinationChainID == "" {
+		a.logger.Errorf("Empty Request (/signature/{amount}/{recipient}/{destinationChainID})")
 		common.ResponJSON(w, http.StatusInternalServerError, createNewError("empty request", ""))
 		return
 	}
-	messagehash, signature, err := a.relayer.CreateSignature(amount, recipientAddress, originChainID)
+	signature, err := a.relayer.CreateSignature(amount, recipientAddress, destinationChainID)
 	if err != nil {
 		common.ResponError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	res := SigAndHash{
-		Hash:      messagehash,
-		Signature: signature,
-	}
 
-	common.ResponJSON(w, http.StatusOK, res)
+	common.ResponJSON(w, http.StatusOK, signature)
 }
