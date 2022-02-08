@@ -115,9 +115,7 @@ func (w *Erc20Worker) TransferExtraFee(receiptAddr string, amount uint64) (strin
 		return "", err
 	}
 
-	println("amount", amount)
 	value := new(big.Int).SetUint64(amount)
-	println(value)
 	if value.Uint64() > 0 {
 		tx, err := instance.TransferExtraFee(auth, common.HexToAddress(receiptAddr), value)
 		if err != nil {
@@ -286,7 +284,7 @@ func (w *Erc20Worker) GetTxCountLatest() (uint64, error) {
 	var result uint64
 	rpcClient := jsonrpc.NewClient(w.provider)
 
-	resp, err := rpcClient.Call("eth_getTransactionCount", w.config.WorkerAddr.Hex(), "pending")
+	resp, err := rpcClient.Call("eth_getTransactionCount", w.config.WorkerAddr.Hex(), "latest")
 	if err != nil {
 		return 0, err
 	}

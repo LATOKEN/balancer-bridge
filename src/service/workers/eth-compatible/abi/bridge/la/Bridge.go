@@ -40,7 +40,7 @@ type BridgeProposal struct {
 
 // LaBrMetaData contains all meta data concerning the LaBr contract.
 var LaBrMetaData = &bind.MetaData{
-	ABI: "[{\"name\":\"paused\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"name\":\"sub\",\"type\":\"function\",\"inputs\":[{\"name\":\"a\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"b\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"pure\"},{\"name\":\"owner\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"name\":\"renounceOwnership\",\"type\":\"function\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"transferOwnership\",\"type\":\"function\",\"inputs\":[{\"name\":\"newOwner\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"_chainID\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"}],\"stateMutability\":\"view\"},{\"name\":\"_relayerThreshold\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"name\":\"_totalProposals\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"name\":\"_fee\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"name\":\"_expiry\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"name\":\"_relayerHubAddress\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"name\":\"_backendSrvAddress\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"name\":\"_balancerAddress\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"name\":\"_nativeResourceID\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"stateMutability\":\"view\"},{\"name\":\"INIT_CHAINID\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"}],\"stateMutability\":\"view\"},{\"name\":\"INIT_RELAYERTHRESHOLD\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"name\":\"INIT_FEE\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"name\":\"INIT_EXPIRY\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"name\":\"_depositCounts\",\"type\":\"function\",\"inputs\":[{\"name\":\"\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint64\",\"internalType\":\"uint64\"}],\"stateMutability\":\"view\"},{\"name\":\"_resourceIDToHandlerAddress\",\"type\":\"function\",\"inputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"name\":\"_depositRecords\",\"type\":\"function\",\"inputs\":[{\"name\":\"\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"stateMutability\":\"view\"},{\"name\":\"_proposals\",\"type\":\"function\",\"inputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[{\"name\":\"\",\"type\":\"tuple\",\"internalType\":\"structBridge.Proposal\",\"components\":[{\"name\":\"_resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"_dataHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"_yesVotes\",\"type\":\"address[]\",\"internalType\":\"address[]\"},{\"name\":\"_noVotes\",\"type\":\"address[]\",\"internalType\":\"address[]\"},{\"name\":\"_status\",\"type\":\"uint8\",\"internalType\":\"enumBridge.ProposalStatus\"},{\"name\":\"_proposedBlock\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"stateMutability\":\"view\"},{\"name\":\"_hasVotedOnProposal\",\"type\":\"function\",\"inputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"name\":\"init\",\"type\":\"function\",\"inputs\":[{\"name\":\"initBackendSrvAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"initBalancerAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetRelayerHub\",\"type\":\"function\",\"inputs\":[{\"name\":\"newRelayerHub\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetBackendSrvAddress\",\"type\":\"function\",\"inputs\":[{\"name\":\"newBackendSrv\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetBalancerAddress\",\"type\":\"function\",\"inputs\":[{\"name\":\"newBalancer\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminPauseTransfers\",\"type\":\"function\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminUnpauseTransfers\",\"type\":\"function\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminChangeRelayerThreshold\",\"type\":\"function\",\"inputs\":[{\"name\":\"newThreshold\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetResource\",\"type\":\"function\",\"inputs\":[{\"name\":\"handlerAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"tokenAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetBurnable\",\"type\":\"function\",\"inputs\":[{\"name\":\"handlerAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"tokenAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetNativeResourceID\",\"type\":\"function\",\"inputs\":[{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"getProposal\",\"type\":\"function\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"dataHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[{\"name\":\"\",\"type\":\"tuple\",\"internalType\":\"structBridge.Proposal\",\"components\":[{\"name\":\"_resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"_dataHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"_yesVotes\",\"type\":\"address[]\",\"internalType\":\"address[]\"},{\"name\":\"_noVotes\",\"type\":\"address[]\",\"internalType\":\"address[]\"},{\"name\":\"_status\",\"type\":\"uint8\",\"internalType\":\"enumBridge.ProposalStatus\"},{\"name\":\"_proposedBlock\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"stateMutability\":\"view\"},{\"name\":\"adminChangeFee\",\"type\":\"function\",\"inputs\":[{\"name\":\"newFee\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminWithdraw\",\"type\":\"function\",\"inputs\":[{\"name\":\"handlerAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"tokenAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amountOrTokenID\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"deposit\",\"type\":\"function\",\"inputs\":[{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"payable\"},{\"name\":\"voteProposal\",\"type\":\"function\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"cancelProposal\",\"type\":\"function\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"executeProposal\",\"type\":\"function\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"addresspayable\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminCollectFees\",\"type\":\"function\",\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"relayerCollectReward\",\"type\":\"function\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"transferExtraFee\",\"type\":\"function\",\"inputs\":[{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"addresspayable\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"Paused\",\"type\":\"event\",\"inputs\":[{\"name\":\"account\",\"type\":\"address\",\"internalType\":\"address\"}],\"anonymous\":false},{\"name\":\"Unpaused\",\"type\":\"event\",\"inputs\":[{\"name\":\"account\",\"type\":\"address\",\"internalType\":\"address\"}],\"anonymous\":false},{\"name\":\"OwnershipTransferred\",\"type\":\"event\",\"inputs\":[{\"name\":\"previousOwner\",\"type\":\"address\",\"internalType\":\"address\",\"indexed\":true},{\"name\":\"newOwner\",\"type\":\"address\",\"internalType\":\"address\",\"indexed\":true}],\"anonymous\":false},{\"name\":\"RelayerThresholdChanged\",\"type\":\"event\",\"inputs\":[{\"name\":\"newThreshold\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"anonymous\":false},{\"name\":\"Deposit\",\"type\":\"event\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"depositor\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"tokenAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"dataHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"anonymous\":false},{\"name\":\"ProposalEvent\",\"type\":\"event\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"status\",\"type\":\"uint8\",\"internalType\":\"enumBridge.ProposalStatus\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"dataHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"anonymous\":false},{\"name\":\"ProposalVote\",\"type\":\"event\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"status\",\"type\":\"uint8\",\"internalType\":\"enumBridge.ProposalStatus\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"anonymous\":false},{\"name\":\"RewardCollected\",\"type\":\"event\",\"inputs\":[{\"name\":\"relayer\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"anonymous\":false},{\"name\":\"ExtraFeeTransferred\",\"type\":\"event\",\"inputs\":[{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"anonymous\":false}]",
+	ABI: "[{\"name\":\"paused\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"name\":\"sub\",\"type\":\"function\",\"inputs\":[{\"name\":\"a\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"b\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"pure\"},{\"name\":\"_isInitialised\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"name\":\"ownableInit\",\"type\":\"function\",\"inputs\":[{\"name\":\"owner_\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"owner\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"name\":\"renounceOwnership\",\"type\":\"function\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"transferOwnership\",\"type\":\"function\",\"inputs\":[{\"name\":\"newOwner\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"isHashClaimed\",\"type\":\"function\",\"inputs\":[{\"name\":\"_hash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"name\":\"getEthSignedMessageHash\",\"type\":\"function\",\"inputs\":[{\"name\":\"_messageHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"stateMutability\":\"pure\"},{\"name\":\"verify\",\"type\":\"function\",\"inputs\":[{\"name\":\"_ethSignedMessageHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"_signer\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"_signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"pure\"},{\"name\":\"getSigner\",\"type\":\"function\",\"inputs\":[{\"name\":\"messageHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"pure\"},{\"name\":\"createMsgHash\",\"type\":\"function\",\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"chainId\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"stateMutability\":\"pure\"},{\"name\":\"message\",\"type\":\"function\",\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"chainId\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"stateMutability\":\"pure\"},{\"name\":\"implementation\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"name\":\"_chainID\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"}],\"stateMutability\":\"view\"},{\"name\":\"_relayerThreshold\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"name\":\"_totalProposals\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"name\":\"_fee\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"name\":\"_expiry\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"name\":\"_relayerHubAddress\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"name\":\"_backendSrvAddress\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"name\":\"_balancerAddress\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"name\":\"_nativeResourceID\",\"type\":\"function\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"stateMutability\":\"view\"},{\"name\":\"_depositCounts\",\"type\":\"function\",\"inputs\":[{\"name\":\"\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint64\",\"internalType\":\"uint64\"}],\"stateMutability\":\"view\"},{\"name\":\"_resourceIDToHandlerAddress\",\"type\":\"function\",\"inputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"name\":\"_depositRecords\",\"type\":\"function\",\"inputs\":[{\"name\":\"\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"stateMutability\":\"view\"},{\"name\":\"_proposals\",\"type\":\"function\",\"inputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[{\"name\":\"\",\"type\":\"tuple\",\"internalType\":\"structBridge.Proposal\",\"components\":[{\"name\":\"_resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"_dataHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"_yesVotes\",\"type\":\"address[]\",\"internalType\":\"address[]\"},{\"name\":\"_noVotes\",\"type\":\"address[]\",\"internalType\":\"address[]\"},{\"name\":\"_status\",\"type\":\"uint8\",\"internalType\":\"enumBridge.ProposalStatus\"},{\"name\":\"_proposedBlock\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"stateMutability\":\"view\"},{\"name\":\"_hasVotedOnProposal\",\"type\":\"function\",\"inputs\":[{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"name\":\"initialize\",\"type\":\"function\",\"inputs\":[{\"name\":\"chainID_\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"relayerThreshold_\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"fee_\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"expiry_\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"initBackendSrvAddress_\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"initBalancerAddress_\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetRelayerHub\",\"type\":\"function\",\"inputs\":[{\"name\":\"newRelayerHub\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetBackendSrvAddress\",\"type\":\"function\",\"inputs\":[{\"name\":\"newBackendSrv\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetBalancerAddress\",\"type\":\"function\",\"inputs\":[{\"name\":\"newBalancer\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminPauseTransfers\",\"type\":\"function\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminUnpauseTransfers\",\"type\":\"function\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminChangeRelayerThreshold\",\"type\":\"function\",\"inputs\":[{\"name\":\"newThreshold\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetResource\",\"type\":\"function\",\"inputs\":[{\"name\":\"handlerAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"tokenAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetBurnable\",\"type\":\"function\",\"inputs\":[{\"name\":\"handlerAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"tokenAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminSetNativeResourceID\",\"type\":\"function\",\"inputs\":[{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"getProposal\",\"type\":\"function\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"dataHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[{\"name\":\"\",\"type\":\"tuple\",\"internalType\":\"structBridge.Proposal\",\"components\":[{\"name\":\"_resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"_dataHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"_yesVotes\",\"type\":\"address[]\",\"internalType\":\"address[]\"},{\"name\":\"_noVotes\",\"type\":\"address[]\",\"internalType\":\"address[]\"},{\"name\":\"_status\",\"type\":\"uint8\",\"internalType\":\"enumBridge.ProposalStatus\"},{\"name\":\"_proposedBlock\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"stateMutability\":\"view\"},{\"name\":\"adminChangeFee\",\"type\":\"function\",\"inputs\":[{\"name\":\"newFee\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminWithdraw\",\"type\":\"function\",\"inputs\":[{\"name\":\"handlerAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"tokenAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amountOrTokenID\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"deposit\",\"type\":\"function\",\"inputs\":[{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"messageHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[],\"stateMutability\":\"payable\"},{\"name\":\"voteProposal\",\"type\":\"function\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"cancelProposal\",\"type\":\"function\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"executeProposal\",\"type\":\"function\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"addresspayable\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"adminCollectFees\",\"type\":\"function\",\"inputs\":[{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"addresspayable\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"relayerCollectReward\",\"type\":\"function\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"transferExtraFee\",\"type\":\"function\",\"inputs\":[{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"addresspayable\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"name\":\"depositFunds\",\"type\":\"function\",\"inputs\":[],\"outputs\":[],\"stateMutability\":\"payable\"},{\"name\":\"Paused\",\"type\":\"event\",\"inputs\":[{\"name\":\"account\",\"type\":\"address\",\"internalType\":\"address\"}],\"anonymous\":false},{\"name\":\"Unpaused\",\"type\":\"event\",\"inputs\":[{\"name\":\"account\",\"type\":\"address\",\"internalType\":\"address\"}],\"anonymous\":false},{\"name\":\"OwnershipTransferred\",\"type\":\"event\",\"inputs\":[{\"name\":\"previousOwner\",\"type\":\"address\",\"internalType\":\"address\",\"indexed\":true},{\"name\":\"newOwner\",\"type\":\"address\",\"internalType\":\"address\",\"indexed\":true}],\"anonymous\":false},{\"name\":\"RelayerThresholdChanged\",\"type\":\"event\",\"inputs\":[{\"name\":\"newThreshold\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"anonymous\":false},{\"name\":\"Deposit\",\"type\":\"event\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"depositor\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"tokenAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"dataHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"anonymous\":false},{\"name\":\"ProposalEvent\",\"type\":\"event\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"destinationChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"recipientAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"status\",\"type\":\"uint8\",\"internalType\":\"enumBridge.ProposalStatus\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"dataHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"anonymous\":false},{\"name\":\"ProposalVote\",\"type\":\"event\",\"inputs\":[{\"name\":\"originChainID\",\"type\":\"bytes8\",\"internalType\":\"bytes8\"},{\"name\":\"depositNonce\",\"type\":\"uint64\",\"internalType\":\"uint64\"},{\"name\":\"status\",\"type\":\"uint8\",\"internalType\":\"enumBridge.ProposalStatus\"},{\"name\":\"resourceID\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"anonymous\":false},{\"name\":\"RewardCollected\",\"type\":\"event\",\"inputs\":[{\"name\":\"relayer\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"anonymous\":false},{\"name\":\"ExtraFeeTransferred\",\"type\":\"event\",\"inputs\":[{\"name\":\"recipient\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"anonymous\":false}]",
 }
 
 // LaBrABI is the input ABI used to generate the binding from.
@@ -187,130 +187,6 @@ func (_LaBr *LaBrTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transa
 // Transact invokes the (paid) contract method with params as input values.
 func (_LaBr *LaBrTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
 	return _LaBr.Contract.contract.Transact(opts, method, params...)
-}
-
-// INITCHAINID is a free data retrieval call binding the contract method 0x45fb7494.
-//
-// Solidity: function INIT_CHAINID() view returns(bytes8)
-func (_LaBr *LaBrCaller) INITCHAINID(opts *bind.CallOpts) ([8]byte, error) {
-	var out []interface{}
-	err := _LaBr.contract.Call(opts, &out, "INIT_CHAINID")
-
-	if err != nil {
-		return *new([8]byte), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new([8]byte)).(*[8]byte)
-
-	return out0, err
-
-}
-
-// INITCHAINID is a free data retrieval call binding the contract method 0x45fb7494.
-//
-// Solidity: function INIT_CHAINID() view returns(bytes8)
-func (_LaBr *LaBrSession) INITCHAINID() ([8]byte, error) {
-	return _LaBr.Contract.INITCHAINID(&_LaBr.CallOpts)
-}
-
-// INITCHAINID is a free data retrieval call binding the contract method 0x45fb7494.
-//
-// Solidity: function INIT_CHAINID() view returns(bytes8)
-func (_LaBr *LaBrCallerSession) INITCHAINID() ([8]byte, error) {
-	return _LaBr.Contract.INITCHAINID(&_LaBr.CallOpts)
-}
-
-// INITEXPIRY is a free data retrieval call binding the contract method 0x0461ce72.
-//
-// Solidity: function INIT_EXPIRY() view returns(uint256)
-func (_LaBr *LaBrCaller) INITEXPIRY(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _LaBr.contract.Call(opts, &out, "INIT_EXPIRY")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
-}
-
-// INITEXPIRY is a free data retrieval call binding the contract method 0x0461ce72.
-//
-// Solidity: function INIT_EXPIRY() view returns(uint256)
-func (_LaBr *LaBrSession) INITEXPIRY() (*big.Int, error) {
-	return _LaBr.Contract.INITEXPIRY(&_LaBr.CallOpts)
-}
-
-// INITEXPIRY is a free data retrieval call binding the contract method 0x0461ce72.
-//
-// Solidity: function INIT_EXPIRY() view returns(uint256)
-func (_LaBr *LaBrCallerSession) INITEXPIRY() (*big.Int, error) {
-	return _LaBr.Contract.INITEXPIRY(&_LaBr.CallOpts)
-}
-
-// INITFEE is a free data retrieval call binding the contract method 0x82b4beec.
-//
-// Solidity: function INIT_FEE() view returns(uint256)
-func (_LaBr *LaBrCaller) INITFEE(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _LaBr.contract.Call(opts, &out, "INIT_FEE")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
-}
-
-// INITFEE is a free data retrieval call binding the contract method 0x82b4beec.
-//
-// Solidity: function INIT_FEE() view returns(uint256)
-func (_LaBr *LaBrSession) INITFEE() (*big.Int, error) {
-	return _LaBr.Contract.INITFEE(&_LaBr.CallOpts)
-}
-
-// INITFEE is a free data retrieval call binding the contract method 0x82b4beec.
-//
-// Solidity: function INIT_FEE() view returns(uint256)
-func (_LaBr *LaBrCallerSession) INITFEE() (*big.Int, error) {
-	return _LaBr.Contract.INITFEE(&_LaBr.CallOpts)
-}
-
-// INITRELAYERTHRESHOLD is a free data retrieval call binding the contract method 0xcacc26ed.
-//
-// Solidity: function INIT_RELAYERTHRESHOLD() view returns(uint256)
-func (_LaBr *LaBrCaller) INITRELAYERTHRESHOLD(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _LaBr.contract.Call(opts, &out, "INIT_RELAYERTHRESHOLD")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
-}
-
-// INITRELAYERTHRESHOLD is a free data retrieval call binding the contract method 0xcacc26ed.
-//
-// Solidity: function INIT_RELAYERTHRESHOLD() view returns(uint256)
-func (_LaBr *LaBrSession) INITRELAYERTHRESHOLD() (*big.Int, error) {
-	return _LaBr.Contract.INITRELAYERTHRESHOLD(&_LaBr.CallOpts)
-}
-
-// INITRELAYERTHRESHOLD is a free data retrieval call binding the contract method 0xcacc26ed.
-//
-// Solidity: function INIT_RELAYERTHRESHOLD() view returns(uint256)
-func (_LaBr *LaBrCallerSession) INITRELAYERTHRESHOLD() (*big.Int, error) {
-	return _LaBr.Contract.INITRELAYERTHRESHOLD(&_LaBr.CallOpts)
 }
 
 // BackendSrvAddress is a free data retrieval call binding the contract method 0x7f5d6a5e.
@@ -561,6 +437,37 @@ func (_LaBr *LaBrCallerSession) HasVotedOnProposal(arg0 [32]byte, arg1 [32]byte,
 	return _LaBr.Contract.HasVotedOnProposal(&_LaBr.CallOpts, arg0, arg1, arg2)
 }
 
+// IsInitialised is a free data retrieval call binding the contract method 0xdd2e8ec3.
+//
+// Solidity: function _isInitialised() view returns(bool)
+func (_LaBr *LaBrCaller) IsInitialised(opts *bind.CallOpts) (bool, error) {
+	var out []interface{}
+	err := _LaBr.contract.Call(opts, &out, "_isInitialised")
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
+}
+
+// IsInitialised is a free data retrieval call binding the contract method 0xdd2e8ec3.
+//
+// Solidity: function _isInitialised() view returns(bool)
+func (_LaBr *LaBrSession) IsInitialised() (bool, error) {
+	return _LaBr.Contract.IsInitialised(&_LaBr.CallOpts)
+}
+
+// IsInitialised is a free data retrieval call binding the contract method 0xdd2e8ec3.
+//
+// Solidity: function _isInitialised() view returns(bool)
+func (_LaBr *LaBrCallerSession) IsInitialised() (bool, error) {
+	return _LaBr.Contract.IsInitialised(&_LaBr.CallOpts)
+}
+
 // NativeResourceID is a free data retrieval call binding the contract method 0xa21b952e.
 //
 // Solidity: function _nativeResourceID() view returns(bytes32)
@@ -747,6 +654,68 @@ func (_LaBr *LaBrCallerSession) TotalProposals() (*big.Int, error) {
 	return _LaBr.Contract.TotalProposals(&_LaBr.CallOpts)
 }
 
+// CreateMsgHash is a free data retrieval call binding the contract method 0x3ff91aff.
+//
+// Solidity: function createMsgHash(uint256 amount, address recipient, bytes8 chainId) pure returns(bytes32)
+func (_LaBr *LaBrCaller) CreateMsgHash(opts *bind.CallOpts, amount *big.Int, recipient common.Address, chainId [8]byte) ([32]byte, error) {
+	var out []interface{}
+	err := _LaBr.contract.Call(opts, &out, "createMsgHash", amount, recipient, chainId)
+
+	if err != nil {
+		return *new([32]byte), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
+
+	return out0, err
+
+}
+
+// CreateMsgHash is a free data retrieval call binding the contract method 0x3ff91aff.
+//
+// Solidity: function createMsgHash(uint256 amount, address recipient, bytes8 chainId) pure returns(bytes32)
+func (_LaBr *LaBrSession) CreateMsgHash(amount *big.Int, recipient common.Address, chainId [8]byte) ([32]byte, error) {
+	return _LaBr.Contract.CreateMsgHash(&_LaBr.CallOpts, amount, recipient, chainId)
+}
+
+// CreateMsgHash is a free data retrieval call binding the contract method 0x3ff91aff.
+//
+// Solidity: function createMsgHash(uint256 amount, address recipient, bytes8 chainId) pure returns(bytes32)
+func (_LaBr *LaBrCallerSession) CreateMsgHash(amount *big.Int, recipient common.Address, chainId [8]byte) ([32]byte, error) {
+	return _LaBr.Contract.CreateMsgHash(&_LaBr.CallOpts, amount, recipient, chainId)
+}
+
+// GetEthSignedMessageHash is a free data retrieval call binding the contract method 0xfa540801.
+//
+// Solidity: function getEthSignedMessageHash(bytes32 _messageHash) pure returns(bytes32)
+func (_LaBr *LaBrCaller) GetEthSignedMessageHash(opts *bind.CallOpts, _messageHash [32]byte) ([32]byte, error) {
+	var out []interface{}
+	err := _LaBr.contract.Call(opts, &out, "getEthSignedMessageHash", _messageHash)
+
+	if err != nil {
+		return *new([32]byte), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
+
+	return out0, err
+
+}
+
+// GetEthSignedMessageHash is a free data retrieval call binding the contract method 0xfa540801.
+//
+// Solidity: function getEthSignedMessageHash(bytes32 _messageHash) pure returns(bytes32)
+func (_LaBr *LaBrSession) GetEthSignedMessageHash(_messageHash [32]byte) ([32]byte, error) {
+	return _LaBr.Contract.GetEthSignedMessageHash(&_LaBr.CallOpts, _messageHash)
+}
+
+// GetEthSignedMessageHash is a free data retrieval call binding the contract method 0xfa540801.
+//
+// Solidity: function getEthSignedMessageHash(bytes32 _messageHash) pure returns(bytes32)
+func (_LaBr *LaBrCallerSession) GetEthSignedMessageHash(_messageHash [32]byte) ([32]byte, error) {
+	return _LaBr.Contract.GetEthSignedMessageHash(&_LaBr.CallOpts, _messageHash)
+}
+
 // GetProposal is a free data retrieval call binding the contract method 0xab4a8ae6.
 //
 // Solidity: function getProposal(bytes8 originChainID, bytes8 destinationChainID, uint64 depositNonce, bytes32 dataHash) view returns((bytes32,bytes32,address[],address[],uint8,uint256))
@@ -776,6 +745,130 @@ func (_LaBr *LaBrSession) GetProposal(originChainID [8]byte, destinationChainID 
 // Solidity: function getProposal(bytes8 originChainID, bytes8 destinationChainID, uint64 depositNonce, bytes32 dataHash) view returns((bytes32,bytes32,address[],address[],uint8,uint256))
 func (_LaBr *LaBrCallerSession) GetProposal(originChainID [8]byte, destinationChainID [8]byte, depositNonce uint64, dataHash [32]byte) (BridgeProposal, error) {
 	return _LaBr.Contract.GetProposal(&_LaBr.CallOpts, originChainID, destinationChainID, depositNonce, dataHash)
+}
+
+// GetSigner is a free data retrieval call binding the contract method 0xf7b2ec0d.
+//
+// Solidity: function getSigner(bytes32 messageHash, bytes signature) pure returns(address)
+func (_LaBr *LaBrCaller) GetSigner(opts *bind.CallOpts, messageHash [32]byte, signature []byte) (common.Address, error) {
+	var out []interface{}
+	err := _LaBr.contract.Call(opts, &out, "getSigner", messageHash, signature)
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// GetSigner is a free data retrieval call binding the contract method 0xf7b2ec0d.
+//
+// Solidity: function getSigner(bytes32 messageHash, bytes signature) pure returns(address)
+func (_LaBr *LaBrSession) GetSigner(messageHash [32]byte, signature []byte) (common.Address, error) {
+	return _LaBr.Contract.GetSigner(&_LaBr.CallOpts, messageHash, signature)
+}
+
+// GetSigner is a free data retrieval call binding the contract method 0xf7b2ec0d.
+//
+// Solidity: function getSigner(bytes32 messageHash, bytes signature) pure returns(address)
+func (_LaBr *LaBrCallerSession) GetSigner(messageHash [32]byte, signature []byte) (common.Address, error) {
+	return _LaBr.Contract.GetSigner(&_LaBr.CallOpts, messageHash, signature)
+}
+
+// Implementation is a free data retrieval call binding the contract method 0x5c60da1b.
+//
+// Solidity: function implementation() view returns(address)
+func (_LaBr *LaBrCaller) Implementation(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _LaBr.contract.Call(opts, &out, "implementation")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// Implementation is a free data retrieval call binding the contract method 0x5c60da1b.
+//
+// Solidity: function implementation() view returns(address)
+func (_LaBr *LaBrSession) Implementation() (common.Address, error) {
+	return _LaBr.Contract.Implementation(&_LaBr.CallOpts)
+}
+
+// Implementation is a free data retrieval call binding the contract method 0x5c60da1b.
+//
+// Solidity: function implementation() view returns(address)
+func (_LaBr *LaBrCallerSession) Implementation() (common.Address, error) {
+	return _LaBr.Contract.Implementation(&_LaBr.CallOpts)
+}
+
+// IsHashClaimed is a free data retrieval call binding the contract method 0xe650f736.
+//
+// Solidity: function isHashClaimed(bytes32 _hash) view returns(bool)
+func (_LaBr *LaBrCaller) IsHashClaimed(opts *bind.CallOpts, _hash [32]byte) (bool, error) {
+	var out []interface{}
+	err := _LaBr.contract.Call(opts, &out, "isHashClaimed", _hash)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
+}
+
+// IsHashClaimed is a free data retrieval call binding the contract method 0xe650f736.
+//
+// Solidity: function isHashClaimed(bytes32 _hash) view returns(bool)
+func (_LaBr *LaBrSession) IsHashClaimed(_hash [32]byte) (bool, error) {
+	return _LaBr.Contract.IsHashClaimed(&_LaBr.CallOpts, _hash)
+}
+
+// IsHashClaimed is a free data retrieval call binding the contract method 0xe650f736.
+//
+// Solidity: function isHashClaimed(bytes32 _hash) view returns(bool)
+func (_LaBr *LaBrCallerSession) IsHashClaimed(_hash [32]byte) (bool, error) {
+	return _LaBr.Contract.IsHashClaimed(&_LaBr.CallOpts, _hash)
+}
+
+// Message is a free data retrieval call binding the contract method 0xb207bcfe.
+//
+// Solidity: function message(uint256 amount, address recipient, bytes8 chainId) pure returns(bytes)
+func (_LaBr *LaBrCaller) Message(opts *bind.CallOpts, amount *big.Int, recipient common.Address, chainId [8]byte) ([]byte, error) {
+	var out []interface{}
+	err := _LaBr.contract.Call(opts, &out, "message", amount, recipient, chainId)
+
+	if err != nil {
+		return *new([]byte), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([]byte)).(*[]byte)
+
+	return out0, err
+
+}
+
+// Message is a free data retrieval call binding the contract method 0xb207bcfe.
+//
+// Solidity: function message(uint256 amount, address recipient, bytes8 chainId) pure returns(bytes)
+func (_LaBr *LaBrSession) Message(amount *big.Int, recipient common.Address, chainId [8]byte) ([]byte, error) {
+	return _LaBr.Contract.Message(&_LaBr.CallOpts, amount, recipient, chainId)
+}
+
+// Message is a free data retrieval call binding the contract method 0xb207bcfe.
+//
+// Solidity: function message(uint256 amount, address recipient, bytes8 chainId) pure returns(bytes)
+func (_LaBr *LaBrCallerSession) Message(amount *big.Int, recipient common.Address, chainId [8]byte) ([]byte, error) {
+	return _LaBr.Contract.Message(&_LaBr.CallOpts, amount, recipient, chainId)
 }
 
 // Owner is a free data retrieval call binding the contract method 0x8da5cb5b.
@@ -871,6 +964,37 @@ func (_LaBr *LaBrCallerSession) Sub(a *big.Int, b *big.Int) (*big.Int, error) {
 	return _LaBr.Contract.Sub(&_LaBr.CallOpts, a, b)
 }
 
+// Verify is a free data retrieval call binding the contract method 0xf5cf2ce1.
+//
+// Solidity: function verify(bytes32 _ethSignedMessageHash, address _signer, bytes _signature) pure returns(bool)
+func (_LaBr *LaBrCaller) Verify(opts *bind.CallOpts, _ethSignedMessageHash [32]byte, _signer common.Address, _signature []byte) (bool, error) {
+	var out []interface{}
+	err := _LaBr.contract.Call(opts, &out, "verify", _ethSignedMessageHash, _signer, _signature)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
+}
+
+// Verify is a free data retrieval call binding the contract method 0xf5cf2ce1.
+//
+// Solidity: function verify(bytes32 _ethSignedMessageHash, address _signer, bytes _signature) pure returns(bool)
+func (_LaBr *LaBrSession) Verify(_ethSignedMessageHash [32]byte, _signer common.Address, _signature []byte) (bool, error) {
+	return _LaBr.Contract.Verify(&_LaBr.CallOpts, _ethSignedMessageHash, _signer, _signature)
+}
+
+// Verify is a free data retrieval call binding the contract method 0xf5cf2ce1.
+//
+// Solidity: function verify(bytes32 _ethSignedMessageHash, address _signer, bytes _signature) pure returns(bool)
+func (_LaBr *LaBrCallerSession) Verify(_ethSignedMessageHash [32]byte, _signer common.Address, _signature []byte) (bool, error) {
+	return _LaBr.Contract.Verify(&_LaBr.CallOpts, _ethSignedMessageHash, _signer, _signature)
+}
+
 // AdminChangeFee is a paid mutator transaction binding the contract method 0x91c404ac.
 //
 // Solidity: function adminChangeFee(uint256 newFee) returns()
@@ -913,25 +1037,25 @@ func (_LaBr *LaBrTransactorSession) AdminChangeRelayerThreshold(newThreshold *bi
 	return _LaBr.Contract.AdminChangeRelayerThreshold(&_LaBr.TransactOpts, newThreshold)
 }
 
-// AdminCollectFees is a paid mutator transaction binding the contract method 0xe77b33fd.
+// AdminCollectFees is a paid mutator transaction binding the contract method 0x7a7eed77.
 //
-// Solidity: function adminCollectFees(uint256 amount) returns()
-func (_LaBr *LaBrTransactor) AdminCollectFees(opts *bind.TransactOpts, amount *big.Int) (*types.Transaction, error) {
-	return _LaBr.contract.Transact(opts, "adminCollectFees", amount)
+// Solidity: function adminCollectFees(address recipient, uint256 amount) returns()
+func (_LaBr *LaBrTransactor) AdminCollectFees(opts *bind.TransactOpts, recipient common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _LaBr.contract.Transact(opts, "adminCollectFees", recipient, amount)
 }
 
-// AdminCollectFees is a paid mutator transaction binding the contract method 0xe77b33fd.
+// AdminCollectFees is a paid mutator transaction binding the contract method 0x7a7eed77.
 //
-// Solidity: function adminCollectFees(uint256 amount) returns()
-func (_LaBr *LaBrSession) AdminCollectFees(amount *big.Int) (*types.Transaction, error) {
-	return _LaBr.Contract.AdminCollectFees(&_LaBr.TransactOpts, amount)
+// Solidity: function adminCollectFees(address recipient, uint256 amount) returns()
+func (_LaBr *LaBrSession) AdminCollectFees(recipient common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _LaBr.Contract.AdminCollectFees(&_LaBr.TransactOpts, recipient, amount)
 }
 
-// AdminCollectFees is a paid mutator transaction binding the contract method 0xe77b33fd.
+// AdminCollectFees is a paid mutator transaction binding the contract method 0x7a7eed77.
 //
-// Solidity: function adminCollectFees(uint256 amount) returns()
-func (_LaBr *LaBrTransactorSession) AdminCollectFees(amount *big.Int) (*types.Transaction, error) {
-	return _LaBr.Contract.AdminCollectFees(&_LaBr.TransactOpts, amount)
+// Solidity: function adminCollectFees(address recipient, uint256 amount) returns()
+func (_LaBr *LaBrTransactorSession) AdminCollectFees(recipient common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _LaBr.Contract.AdminCollectFees(&_LaBr.TransactOpts, recipient, amount)
 }
 
 // AdminPauseTransfers is a paid mutator transaction binding the contract method 0x80ae1c28.
@@ -1144,25 +1268,46 @@ func (_LaBr *LaBrTransactorSession) CancelProposal(originChainID [8]byte, destin
 	return _LaBr.Contract.CancelProposal(&_LaBr.TransactOpts, originChainID, destinationChainID, depositNonce, recipientAddress, amount, resourceID)
 }
 
-// Deposit is a paid mutator transaction binding the contract method 0x92b7064c.
+// Deposit is a paid mutator transaction binding the contract method 0x36c67c2f.
 //
-// Solidity: function deposit(bytes8 destinationChainID, bytes32 resourceID, uint256 amount, address recipientAddress) payable returns()
-func (_LaBr *LaBrTransactor) Deposit(opts *bind.TransactOpts, destinationChainID [8]byte, resourceID [32]byte, amount *big.Int, recipientAddress common.Address) (*types.Transaction, error) {
-	return _LaBr.contract.Transact(opts, "deposit", destinationChainID, resourceID, amount, recipientAddress)
+// Solidity: function deposit(bytes8 destinationChainID, bytes32 resourceID, uint256 amount, address recipientAddress, bytes32 messageHash, bytes signature) payable returns()
+func (_LaBr *LaBrTransactor) Deposit(opts *bind.TransactOpts, destinationChainID [8]byte, resourceID [32]byte, amount *big.Int, recipientAddress common.Address, messageHash [32]byte, signature []byte) (*types.Transaction, error) {
+	return _LaBr.contract.Transact(opts, "deposit", destinationChainID, resourceID, amount, recipientAddress, messageHash, signature)
 }
 
-// Deposit is a paid mutator transaction binding the contract method 0x92b7064c.
+// Deposit is a paid mutator transaction binding the contract method 0x36c67c2f.
 //
-// Solidity: function deposit(bytes8 destinationChainID, bytes32 resourceID, uint256 amount, address recipientAddress) payable returns()
-func (_LaBr *LaBrSession) Deposit(destinationChainID [8]byte, resourceID [32]byte, amount *big.Int, recipientAddress common.Address) (*types.Transaction, error) {
-	return _LaBr.Contract.Deposit(&_LaBr.TransactOpts, destinationChainID, resourceID, amount, recipientAddress)
+// Solidity: function deposit(bytes8 destinationChainID, bytes32 resourceID, uint256 amount, address recipientAddress, bytes32 messageHash, bytes signature) payable returns()
+func (_LaBr *LaBrSession) Deposit(destinationChainID [8]byte, resourceID [32]byte, amount *big.Int, recipientAddress common.Address, messageHash [32]byte, signature []byte) (*types.Transaction, error) {
+	return _LaBr.Contract.Deposit(&_LaBr.TransactOpts, destinationChainID, resourceID, amount, recipientAddress, messageHash, signature)
 }
 
-// Deposit is a paid mutator transaction binding the contract method 0x92b7064c.
+// Deposit is a paid mutator transaction binding the contract method 0x36c67c2f.
 //
-// Solidity: function deposit(bytes8 destinationChainID, bytes32 resourceID, uint256 amount, address recipientAddress) payable returns()
-func (_LaBr *LaBrTransactorSession) Deposit(destinationChainID [8]byte, resourceID [32]byte, amount *big.Int, recipientAddress common.Address) (*types.Transaction, error) {
-	return _LaBr.Contract.Deposit(&_LaBr.TransactOpts, destinationChainID, resourceID, amount, recipientAddress)
+// Solidity: function deposit(bytes8 destinationChainID, bytes32 resourceID, uint256 amount, address recipientAddress, bytes32 messageHash, bytes signature) payable returns()
+func (_LaBr *LaBrTransactorSession) Deposit(destinationChainID [8]byte, resourceID [32]byte, amount *big.Int, recipientAddress common.Address, messageHash [32]byte, signature []byte) (*types.Transaction, error) {
+	return _LaBr.Contract.Deposit(&_LaBr.TransactOpts, destinationChainID, resourceID, amount, recipientAddress, messageHash, signature)
+}
+
+// DepositFunds is a paid mutator transaction binding the contract method 0xe2c41dbc.
+//
+// Solidity: function depositFunds() payable returns()
+func (_LaBr *LaBrTransactor) DepositFunds(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _LaBr.contract.Transact(opts, "depositFunds")
+}
+
+// DepositFunds is a paid mutator transaction binding the contract method 0xe2c41dbc.
+//
+// Solidity: function depositFunds() payable returns()
+func (_LaBr *LaBrSession) DepositFunds() (*types.Transaction, error) {
+	return _LaBr.Contract.DepositFunds(&_LaBr.TransactOpts)
+}
+
+// DepositFunds is a paid mutator transaction binding the contract method 0xe2c41dbc.
+//
+// Solidity: function depositFunds() payable returns()
+func (_LaBr *LaBrTransactorSession) DepositFunds() (*types.Transaction, error) {
+	return _LaBr.Contract.DepositFunds(&_LaBr.TransactOpts)
 }
 
 // ExecuteProposal is a paid mutator transaction binding the contract method 0x0da380e5.
@@ -1186,25 +1331,46 @@ func (_LaBr *LaBrTransactorSession) ExecuteProposal(originChainID [8]byte, desti
 	return _LaBr.Contract.ExecuteProposal(&_LaBr.TransactOpts, originChainID, destinationChainID, depositNonce, resourceID, recipientAddress, amount)
 }
 
-// Init is a paid mutator transaction binding the contract method 0xf09a4016.
+// Initialize is a paid mutator transaction binding the contract method 0x5b5b417d.
 //
-// Solidity: function init(address initBackendSrvAddress, address initBalancerAddress) returns()
-func (_LaBr *LaBrTransactor) Init(opts *bind.TransactOpts, initBackendSrvAddress common.Address, initBalancerAddress common.Address) (*types.Transaction, error) {
-	return _LaBr.contract.Transact(opts, "init", initBackendSrvAddress, initBalancerAddress)
+// Solidity: function initialize(bytes8 chainID_, uint256 relayerThreshold_, uint256 fee_, uint256 expiry_, address initBackendSrvAddress_, address initBalancerAddress_) returns()
+func (_LaBr *LaBrTransactor) Initialize(opts *bind.TransactOpts, chainID_ [8]byte, relayerThreshold_ *big.Int, fee_ *big.Int, expiry_ *big.Int, initBackendSrvAddress_ common.Address, initBalancerAddress_ common.Address) (*types.Transaction, error) {
+	return _LaBr.contract.Transact(opts, "initialize", chainID_, relayerThreshold_, fee_, expiry_, initBackendSrvAddress_, initBalancerAddress_)
 }
 
-// Init is a paid mutator transaction binding the contract method 0xf09a4016.
+// Initialize is a paid mutator transaction binding the contract method 0x5b5b417d.
 //
-// Solidity: function init(address initBackendSrvAddress, address initBalancerAddress) returns()
-func (_LaBr *LaBrSession) Init(initBackendSrvAddress common.Address, initBalancerAddress common.Address) (*types.Transaction, error) {
-	return _LaBr.Contract.Init(&_LaBr.TransactOpts, initBackendSrvAddress, initBalancerAddress)
+// Solidity: function initialize(bytes8 chainID_, uint256 relayerThreshold_, uint256 fee_, uint256 expiry_, address initBackendSrvAddress_, address initBalancerAddress_) returns()
+func (_LaBr *LaBrSession) Initialize(chainID_ [8]byte, relayerThreshold_ *big.Int, fee_ *big.Int, expiry_ *big.Int, initBackendSrvAddress_ common.Address, initBalancerAddress_ common.Address) (*types.Transaction, error) {
+	return _LaBr.Contract.Initialize(&_LaBr.TransactOpts, chainID_, relayerThreshold_, fee_, expiry_, initBackendSrvAddress_, initBalancerAddress_)
 }
 
-// Init is a paid mutator transaction binding the contract method 0xf09a4016.
+// Initialize is a paid mutator transaction binding the contract method 0x5b5b417d.
 //
-// Solidity: function init(address initBackendSrvAddress, address initBalancerAddress) returns()
-func (_LaBr *LaBrTransactorSession) Init(initBackendSrvAddress common.Address, initBalancerAddress common.Address) (*types.Transaction, error) {
-	return _LaBr.Contract.Init(&_LaBr.TransactOpts, initBackendSrvAddress, initBalancerAddress)
+// Solidity: function initialize(bytes8 chainID_, uint256 relayerThreshold_, uint256 fee_, uint256 expiry_, address initBackendSrvAddress_, address initBalancerAddress_) returns()
+func (_LaBr *LaBrTransactorSession) Initialize(chainID_ [8]byte, relayerThreshold_ *big.Int, fee_ *big.Int, expiry_ *big.Int, initBackendSrvAddress_ common.Address, initBalancerAddress_ common.Address) (*types.Transaction, error) {
+	return _LaBr.Contract.Initialize(&_LaBr.TransactOpts, chainID_, relayerThreshold_, fee_, expiry_, initBackendSrvAddress_, initBalancerAddress_)
+}
+
+// OwnableInit is a paid mutator transaction binding the contract method 0xea439b2b.
+//
+// Solidity: function ownableInit(address owner_) returns()
+func (_LaBr *LaBrTransactor) OwnableInit(opts *bind.TransactOpts, owner_ common.Address) (*types.Transaction, error) {
+	return _LaBr.contract.Transact(opts, "ownableInit", owner_)
+}
+
+// OwnableInit is a paid mutator transaction binding the contract method 0xea439b2b.
+//
+// Solidity: function ownableInit(address owner_) returns()
+func (_LaBr *LaBrSession) OwnableInit(owner_ common.Address) (*types.Transaction, error) {
+	return _LaBr.Contract.OwnableInit(&_LaBr.TransactOpts, owner_)
+}
+
+// OwnableInit is a paid mutator transaction binding the contract method 0xea439b2b.
+//
+// Solidity: function ownableInit(address owner_) returns()
+func (_LaBr *LaBrTransactorSession) OwnableInit(owner_ common.Address) (*types.Transaction, error) {
+	return _LaBr.Contract.OwnableInit(&_LaBr.TransactOpts, owner_)
 }
 
 // RelayerCollectReward is a paid mutator transaction binding the contract method 0xf408da91.
