@@ -172,7 +172,7 @@ func (w *Erc20Worker) GetBlockAndTxs(height int64) (*models.BlockAndTxLogs, erro
 	var head *Header
 	rpcClient := jsonrpc.NewClient(w.provider)
 
-	resp, err := rpcClient.Call("eth_getBlockByNumber", fmt.Sprintf("0x%x", height), false)
+	resp, err := rpcClient.Call("eth_getBlockByNumber", "latest", false)
 	if err != nil {
 		w.logger.Errorln("while call eth_getBlockByNumber, err = ", err)
 		return nil, err
@@ -187,7 +187,11 @@ func (w *Erc20Worker) GetBlockAndTxs(height int64) (*models.BlockAndTxLogs, erro
 		return nil, fmt.Errorf("not found")
 	}
 
-	logs, err := w.getLogs(head.Hash)
+	if height >= int64(head.Number) {
+		return nil, fmt.Errorf("not found")
+	}
+
+	logs, err := w.getLogs(height, int64(head.Number))
 	if err != nil {
 		w.logger.Errorf("while getEvents(blockhash = %s), err = %v", head.Hash, err)
 		return nil, err
@@ -208,10 +212,15 @@ func (w *Erc20Worker) GetFetchInterval() time.Duration {
 }
 
 // getLogs ...
-func (w *Erc20Worker) getLogs(blockHash common.Hash) ([]*storage.TxLog, error) {
+func (w *Erc20Worker) getLogs(curHeight, nextHeight int64) ([]*storage.TxLog, error) {
 	//	topics := [][]common.Hash{{DepositEventHash, ProposalEventHash, ProposalVoteHash}}
+	if curHeight == 0 {
+		curHeight = nextHeight - 1
+	}
+
 	logs, err := w.client.FilterLogs(context.Background(), ethereum.FilterQuery{
-		BlockHash: &blockHash,
+		FromBlock: big.NewInt(curHeight + 1),
+		ToBlock:   big.NewInt(nextHeight),
 		// Topics:    topics,
 		Addresses: []common.Address{w.contractAddr},
 		Topics:    [][]common.Hash{},
