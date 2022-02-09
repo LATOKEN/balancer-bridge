@@ -8,6 +8,7 @@ import (
 
 	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/storage"
 	workers "gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/workers"
+	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/workers/utils"
 )
 
 // !!! TODO !!!
@@ -41,11 +42,22 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 	}
 	//convert other native to corresponding latoken amount
 	lpStr, _ := r.GetPriceOfToken("latoken")
-	latokenPrice, _ := strconv.ParseFloat(lpStr, 32)
+	latokenPrice, _ := strconv.ParseFloat(lpStr, 64)
 	swappedToken := r.storage.FetchResourceID(strings.ToLower(event.ResourceID))
 	spStr, _ := r.GetPriceOfToken(swappedToken.Name)
-	otherChainPrice, _ := strconv.ParseFloat(spStr, 32)
-	inamount, _ := strconv.ParseFloat(event.InAmount, 32)
+	otherChainPrice, _ := strconv.ParseFloat(spStr, 64)
+	tetherRID := r.storage.FetchResourceIDByName("tether").ID
+	bscDestID := r.Workers[storage.BscChain].GetDestinationID()
+	//decimal conversion for BSC USDT
+	var amount string
+	if event.OriginChainID == bscDestID && event.ResourceID == tetherRID {
+		amount = utils.Convertto6Decimals(event.InAmount)
+	} else if event.DestinationChainID == bscDestID && event.ResourceID == tetherRID {
+		amount = utils.Convertto18Decimals(event.InAmount)
+	} else {
+		amount = event.InAmount
+	}
+	inamount, _ := strconv.ParseFloat(amount, 64)
 	event.OutAmount = uint64(inamount * otherChainPrice / latokenPrice)
 
 	r.logger.Infof("Fee Transfer parameters: outAmount(%d) | recipient(%s) | chainID(%s)\n",

@@ -119,6 +119,7 @@ func (w *Erc20Worker) TransferExtraFee(receiptAddr string, amount uint64) (strin
 	if value.Uint64() > 0 {
 		tx, err := instance.TransferExtraFee(auth, common.HexToAddress(receiptAddr), value)
 		if err != nil {
+			println(err.Error())
 			return "", err
 		}
 		return tx.Hash().String(), nil
@@ -316,23 +317,17 @@ func (w *Erc20Worker) getTransactor() (auth *bind.TransactOpts, err error) {
 		if err != nil {
 			return nil, err
 		}
-
-		auth, err = bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(w.chainID))
-		if err != nil {
-			return nil, err
-		}
-
 	} else {
 		nonce, err = w.client.PendingNonceAt(context.Background(), w.config.WorkerAddr)
 		if err != nil {
 			return nil, err
 		}
-		auth, err = bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(w.chainID))
-		if err != nil {
-			return nil, err
-		}
 	}
 
+	auth, err = bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(w.chainID))
+	if err != nil {
+		return nil, err
+	}
 	auth.Nonce = big.NewInt(int64(nonce))
 	auth.Value = big.NewInt(0)                // in wei
 	auth.GasLimit = uint64(w.config.GasLimit) // in units
