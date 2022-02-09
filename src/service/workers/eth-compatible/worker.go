@@ -198,7 +198,7 @@ func (w *Erc20Worker) GetBlockAndTxs(height int64) (*models.BlockAndTxLogs, erro
 	}
 
 	return &models.BlockAndTxLogs{
-		Height:          height,
+		Height:          int64(head.Number),
 		BlockHash:       head.Hash.String(),
 		ParentBlockHash: head.ParentHash.Hex(),
 		BlockTime:       int64(head.Time),
