@@ -14,6 +14,7 @@ import (
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -291,7 +292,7 @@ func (w *Erc20Worker) GetSentTxStatus(hash string) storage.TxStatus {
 }
 
 func (w *Erc20Worker) GetTxCountLatest() (uint64, error) {
-	var result uint64
+	var result hexutil.Uint64
 	rpcClient := jsonrpc.NewClient(w.provider)
 
 	resp, err := rpcClient.Call("eth_getTransactionCount", w.config.WorkerAddr.Hex(), "latest")
@@ -301,7 +302,7 @@ func (w *Erc20Worker) GetTxCountLatest() (uint64, error) {
 	if err := resp.GetObject(&result); err != nil {
 		return 0, err
 	}
-	return result, nil
+	return uint64(result), nil
 }
 
 // GetTransactor ...
