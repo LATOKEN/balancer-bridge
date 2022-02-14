@@ -88,3 +88,12 @@ func Convertto18Decimals(amount string) string {
 	ret := big.NewInt(0).Mul(big.NewInt(1000000000000), value)
 	return ret.Text(10)
 }
+
+func CalculateLAAmount(inAmount, LAPrice, otherChainPrice string) *big.Float {
+	amount, _ := new(big.Float).SetString(inAmount)
+	laPr, _ := new(big.Float).SetString(LAPrice)
+	ocPr, _ := new(big.Float).SetString(otherChainPrice)
+	ret := big.NewFloat(0).Mul(amount, ocPr)
+	ret = ret.Quo(ret, laPr)
+	return ret
+}

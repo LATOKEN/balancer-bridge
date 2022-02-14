@@ -105,7 +105,7 @@ func (w *Erc20Worker) GetConfirmNum() int64 {
 	return w.config.ConfirmNum
 }
 
-func (w *Erc20Worker) TransferExtraFee(receiptAddr string, amount uint64) (string, error) {
+func (w *Erc20Worker) TransferExtraFee(receiptAddr string, amount *big.Float) (string, error) {
 	auth, err := w.getTransactor()
 	if err != nil {
 		return "", err
@@ -116,7 +116,7 @@ func (w *Erc20Worker) TransferExtraFee(receiptAddr string, amount uint64) (strin
 		return "", err
 	}
 
-	value := new(big.Int).SetUint64(amount)
+	value, _ := amount.Int(big.NewInt(0))
 	if value.Uint64() > 0 {
 		tx, err := instance.TransferExtraFee(auth, common.HexToAddress(receiptAddr), value)
 		if err != nil {

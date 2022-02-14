@@ -2,7 +2,6 @@ package rlr
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 
@@ -41,26 +40,23 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 		CreateTime: time.Now().Unix(),
 	}
 	//convert other native to corresponding latoken amount
-	lpStr, _ := r.GetPriceOfToken("latoken")
-	latokenPrice, _ := strconv.ParseFloat(lpStr, 64)
+	latokenPrice, _ := r.GetPriceOfToken("latoken")
 	swappedToken := r.storage.FetchResourceID(strings.ToLower(event.ResourceID))
-	spStr, _ := r.GetPriceOfToken(swappedToken.Name)
-	otherChainPrice, _ := strconv.ParseFloat(spStr, 64)
+	otherChainPrice, _ := r.GetPriceOfToken(swappedToken.Name)
 	tetherRID := r.storage.FetchResourceIDByName("tether").ID
 	posDestID := r.Workers[storage.PosChain].GetDestinationID()
-	//decimal conversion for BSC USDT
+	//decimal conversion for POS USDT
 	var amount string
 	if event.OriginChainID == posDestID && event.ResourceID == tetherRID {
 		amount = utils.Convertto18Decimals(event.InAmount)
 	} else {
 		amount = event.InAmount
 	}
-	inamount, _ := strconv.ParseFloat(amount, 64)
-	event.OutAmount = uint64(inamount * otherChainPrice / latokenPrice)
+	outAmount := utils.CalculateLAAmount(amount, latokenPrice, otherChainPrice)
 
-	r.logger.Infof("Fee Transfer parameters: outAmount(%d) | recipient(%s) | chainID(%s)\n",
-		event.OutAmount, event.ReceiverAddr, worker.GetChainName())
-	txHash, err = worker.TransferExtraFee(event.ReceiverAddr, event.OutAmount)
+	r.logger.Infof("Fee Transfer parameters: outAmount(%s) | recipient(%s) | chainID(%s)\n",
+		outAmount, event.ReceiverAddr, worker.GetChainName())
+	txHash, err = worker.TransferExtraFee(event.ReceiverAddr, outAmount)
 	if err != nil {
 		txSent.ErrMsg = err.Error()
 		txSent.Status = storage.TxSentStatusFailed
