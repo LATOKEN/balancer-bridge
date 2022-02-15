@@ -2,7 +2,6 @@ package rlr
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/storage"
@@ -39,24 +38,22 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 		Type:       storage.TxTypeFeeTransfer,
 		CreateTime: time.Now().Unix(),
 	}
-	//convert other native to corresponding latoken amount
-	latokenPrice, _ := r.GetPriceOfToken("latoken")
-	swappedToken := r.storage.FetchResourceID(strings.ToLower(event.ResourceID))
-	otherChainPrice, _ := r.GetPriceOfToken(swappedToken.Name)
+	// for BSC-USDT decimal conversion
 	tetherRID := r.storage.FetchResourceIDByName("tether").ID
-	posDestID := r.Workers[storage.PosChain].GetDestinationID()
-	//decimal conversion for POS USDT
+	bscDestID := r.Workers[storage.BscChain].GetDestinationID()
 	var amount string
-	if event.OriginChainID == posDestID && event.ResourceID == tetherRID {
-		amount = utils.Convertto18Decimals(event.InAmount)
+	if event.OriginChainID == bscDestID && event.ResourceID == tetherRID {
+		amount = utils.Convertto6Decimals(event.OutAmount)
+	} else if event.DestinationChainID == bscDestID && event.ResourceID == tetherRID {
+		amount = utils.Convertto18Decimals(event.OutAmount)
 	} else {
-		amount = event.InAmount
+		amount = event.OutAmount
 	}
-	outAmount := utils.CalculateLAAmount(amount, latokenPrice, otherChainPrice)
 
 	r.logger.Infof("Fee Transfer parameters: outAmount(%s) | recipient(%s) | chainID(%s)\n",
-		outAmount, event.ReceiverAddr, worker.GetChainName())
-	txHash, err = worker.TransferExtraFee(event.ReceiverAddr, outAmount)
+		amount, event.ReceiverAddr, worker.GetChainName())
+	txHash, err = worker.TransferExtraFee(utils.StringToBytes8(event.OriginChainID), utils.StringToBytes8(event.DestinationChainID),
+		event.DepositNonce, utils.StringToBytes32(event.ResourceID), event.ReceiverAddr, amount)
 	if err != nil {
 		txSent.ErrMsg = err.Error()
 		txSent.Status = storage.TxSentStatusFailed

@@ -8,6 +8,7 @@ import (
 
 	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/storage"
 	ethBr "gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/workers/eth-compatible/abi/bridge/eth"
+	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/workers/utils"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
@@ -65,6 +66,7 @@ func (ev ExtraFeeSupplied) ToTxLog(chain string) *storage.TxLog {
 		DestinationChainID: common.Bytes2Hex(ev.DestinationChainID[:]),
 		OriginСhainID:      common.Bytes2Hex(ev.OriginChainID[:]),
 		ResourceID:         common.Bytes2Hex(ev.ResourceID[:]),
+		SwapID:             utils.CalcutateSwapID(common.Bytes2Hex(ev.OriginChainID[:]), common.Bytes2Hex(ev.DestinationChainID[:]), fmt.Sprint(ev.DepositNonce)),
 		DepositNonce:       ev.DepositNonce,
 	}
 	return txlog

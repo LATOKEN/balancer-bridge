@@ -1,7 +1,6 @@
 package workers
 
 import (
-	"math/big"
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
@@ -35,7 +34,7 @@ type IWorker interface {
 	GetStatus() (*models.WorkerStatus, error)
 
 	//TransferExtraFee to be called on lachain side to transfer
-	TransferExtraFee(receiptAddr string, amount *big.Float) (string, error)
+	TransferExtraFee(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string) (string, error)
 
 	CreateMessageHash(amount, recipientAddress, originChainID string) (common.Hash, error)
 
