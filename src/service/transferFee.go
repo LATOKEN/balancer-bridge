@@ -43,11 +43,11 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 	bscDestID := r.Workers[storage.BscChain].GetDestinationID()
 	var amount string
 	if event.OriginChainID == bscDestID && event.ResourceID == tetherRID {
-		amount = utils.Convertto6Decimals(event.OutAmount)
+		amount = utils.Convertto6Decimals(event.InAmount)
 	} else if event.DestinationChainID == bscDestID && event.ResourceID == tetherRID {
-		amount = utils.Convertto18Decimals(event.OutAmount)
+		amount = utils.Convertto18Decimals(event.InAmount)
 	} else {
-		amount = event.OutAmount
+		amount = event.InAmount
 	}
 
 	r.logger.Infof("Fee Transfer parameters: outAmount(%s) | recipient(%s) | chainID(%s)\n",
