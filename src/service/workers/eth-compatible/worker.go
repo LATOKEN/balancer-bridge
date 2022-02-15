@@ -117,16 +117,13 @@ func (w *Erc20Worker) TransferExtraFee(originChainID, destinationChainID [8]byte
 	}
 
 	value, _ := new(big.Int).SetString(amount, 10)
-	if value.Uint64() > 0 {
-		tx, err := instance.TransferExtraFee(auth, originChainID, destinationChainID, nonce, resourceID, common.HexToAddress(receiptAddr), value)
-		if err != nil {
-			println(err.Error())
-			return "", err
-		}
-		return tx.Hash().String(), nil
-
+	tx, err := instance.TransferExtraFee(auth, originChainID, destinationChainID, nonce, resourceID, common.HexToAddress(receiptAddr), value)
+	if err != nil {
+		println(err.Error())
+		return "", err
 	}
-	return "", nil
+	return tx.Hash().String(), nil
+
 }
 
 // GetStatus returns status of relayer: blockchain; account(address, balance ...)
