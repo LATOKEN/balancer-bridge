@@ -23,7 +23,7 @@ func (r *BridgeSRV) emitFeeTransfer(worker workers.IWorker) {
 				}
 			} else {
 				r.handleTxSent(event.ChainID, event, storage.TxTypeFeeTransfer,
-					storage.EventStatusFeeTransferConfirmed, storage.EventStatusFeeTransferInitConfrimed)
+					storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed)
 			}
 		}
 

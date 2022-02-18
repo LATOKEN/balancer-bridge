@@ -117,7 +117,6 @@ func (w *Erc20Worker) TransferExtraFee(originChainID, destinationChainID [8]byte
 	if err != nil {
 		return "", err
 	}
-
 	value, _ := new(big.Int).SetString(amount, 10)
 	tx, err := instance.TransferExtraFee(auth, originChainID, destinationChainID, nonce, resourceID, common.HexToAddress(receiptAddr), value)
 	if err != nil {
