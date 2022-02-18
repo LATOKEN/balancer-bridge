@@ -113,7 +113,7 @@ func (w *Erc20Worker) TransferExtraFee(originChainID, destinationChainID [8]byte
 		return "", err
 	}
 
-	instance, err := laBr.NewLaBr(w.contractAddr, w.client)
+	instance, err := laBr.NewLaBr(w.proxyContractAddr, w.client)
 	if err != nil {
 		return "", err
 	}
