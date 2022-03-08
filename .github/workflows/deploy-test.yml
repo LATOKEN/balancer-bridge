@@ -22,13 +22,13 @@ jobs:
       with:
         payload: |
           {
-            "text": "New release balancer-bridge:${{ github.ref }} deployed to Testnet by ${{ github.actor }}",
+            "text": "New release balancer-bridge:${{ github.ref_name }} deployed to Testnet by ${{ github.actor }}",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "New release balancer-bridge:${{ github.ref }} deployed to Testnet by ${{ github.actor }}"
+                  "text": "New release balancer-bridge:${{ github.ref_name }} deployed to Testnet by ${{ github.actor }}"
                 }
               }
             ]
