@@ -28,7 +28,8 @@ type BridgeSRV struct {
 }
 
 // CreateNewBridgeSRV ...
-func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig, posCfg, bscCfg, ethCfg, avaxCfg *models.WorkerConfig, fetCfg *models.FetcherConfig, resourceIDs []*storage.ResourceId) *BridgeSRV {
+func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig *models.WorkerConfig,
+	chainCfgs map[string]*models.WorkerConfig, fetCfg *models.FetcherConfig, resourceIDs []*storage.ResourceId) *BridgeSRV {
 	// init database
 	db, err := storage.InitStorage(gormDB)
 	if err != nil {
@@ -43,10 +44,9 @@ func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig, posCfg
 		Workers:  make(map[string]workers.IWorker),
 	}
 	// create erc20 worker
-	inst.Workers[storage.PosChain] = eth.NewErc20Worker(logger, posCfg)
-	inst.Workers[storage.BscChain] = eth.NewErc20Worker(logger, bscCfg)
-	inst.Workers[storage.EthChain] = eth.NewErc20Worker(logger, ethCfg)
-	inst.Workers[storage.AvaxChain] = eth.NewErc20Worker(logger, avaxCfg)
+	for chain, cfg := range chainCfgs {
+		inst.Workers[chain] = eth.NewErc20Worker(logger, cfg)
+	}
 
 	// check rules for workers(>=2, different chainIDs...)
 	if len(inst.Workers) < 1 {

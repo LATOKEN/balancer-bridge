@@ -19,7 +19,8 @@ func main() {
 	cfg := config.NewViperConfig()
 	srvURL := cfg.ReadServiceConfig()
 	laCfg := cfg.ReadLachainConfig()
-	posCfg, bscCfg, ethCfg, avaxCfg := cfg.ReadWorkersConfig()
+	chains := cfg.ReadChains()
+	chainCfgs := cfg.ReadWorkersConfig(chains)
 	fetCfg := cfg.ReadFetcherConfig()
 	dbConfig := cfg.ReadDBConfig()
 	dbURL := fmt.Sprintf(dbConfig.URL, dbConfig.DBHOST, dbConfig.DBPORT, dbConfig.DBUser, dbConfig.DBName, dbConfig.DBPassword, dbConfig.DBSSL)
@@ -63,7 +64,7 @@ func main() {
 		cancel()
 	}()
 
-	app := app.NewApp(logger, srvURL, db, laCfg, posCfg, bscCfg, ethCfg, avaxCfg, fetCfg, resourceIDs)
+	app := app.NewApp(logger, srvURL, db, laCfg, chainCfgs, fetCfg, resourceIDs)
 
 	//run App
 	app.Run(ctx)
