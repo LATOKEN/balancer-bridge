@@ -14,11 +14,12 @@ import (
 // Config ...
 type Config interface {
 	ReadServiceConfig() string
-	ReadWorkersConfig() (*models.WorkerConfig, *models.WorkerConfig, *models.WorkerConfig, *models.WorkerConfig)
+	ReadWorkersConfig([]string) map[string]*models.WorkerConfig
 	ReadLachainConfig() *models.WorkerConfig
 	ReadDBConfig() *models.StorageConfig
 	ReadFetcherConfig() *models.FetcherConfig
 	ReadResourceIDs(*models.FetcherConfig) []*storage.ResourceId
+	ReadChains() []string
 	GetString(key string) string
 	GetStringMap(key string) map[string]string
 	GetInt64(key string) int64
