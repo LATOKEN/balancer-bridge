@@ -1,4 +1,4 @@
-module gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src
+module github.com/latoken/bridge-balancer-service/src
 
 go 1.17
 

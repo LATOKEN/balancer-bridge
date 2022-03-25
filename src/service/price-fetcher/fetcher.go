@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/models"
-	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/storage"
+	"github.com/latoken/bridge-balancer-service/src/models"
+	"github.com/latoken/bridge-balancer-service/src/service/storage"
 
 	"github.com/sirupsen/logrus"
 	gecko "github.com/superoo7/go-gecko/v3"

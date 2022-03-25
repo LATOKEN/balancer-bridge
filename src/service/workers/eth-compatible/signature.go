@@ -7,7 +7,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
-	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/workers/utils"
+	"github.com/latoken/bridge-balancer-service/src/service/workers/utils"
 )
 
 func (w *Erc20Worker) CreateMessageHash(amount, recipientAddress, destinationChainID string) (common.Hash, error) {

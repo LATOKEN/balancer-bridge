@@ -8,8 +8,8 @@ import (
 	"math/big"
 	"time"
 
-	laBr "gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/workers/eth-compatible/abi/bridge/la"
-	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/workers/utils"
+	laBr "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/bridge/la"
+	"github.com/latoken/bridge-balancer-service/src/service/workers/utils"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -21,8 +21,8 @@ import (
 	"github.com/sirupsen/logrus"
 	jsonrpc "github.com/ybbus/jsonrpc/v2"
 
-	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/models"
-	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/storage"
+	"github.com/latoken/bridge-balancer-service/src/models"
+	"github.com/latoken/bridge-balancer-service/src/service/storage"
 )
 
 // Erc20Worker ...

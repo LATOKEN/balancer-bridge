@@ -6,9 +6,9 @@ import (
 	"math/big"
 	"strings"
 
-	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/storage"
-	ethBr "gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/workers/eth-compatible/abi/bridge/eth"
-	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/service/workers/utils"
+	"github.com/latoken/bridge-balancer-service/src/service/storage"
+	ethBr "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/bridge/eth"
+	"github.com/latoken/bridge-balancer-service/src/service/workers/utils"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"

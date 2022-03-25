@@ -5,7 +5,7 @@ import (
 	"math"
 	"math/big"
 
-	"gitlab.nekotal.tech/lachain/crosschain/bridge-backend-service/src/models"
+	"github.com/latoken/bridge-balancer-service/src/models"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
