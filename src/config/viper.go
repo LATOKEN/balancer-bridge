@@ -14,7 +14,7 @@ import (
 // Config ...
 type Config interface {
 	ReadServiceConfig() string
-	ReadWorkersConfig([]string) map[string]*models.WorkerConfig
+	ReadWorkersConfig() []*models.WorkerConfig
 	ReadLachainConfig() *models.WorkerConfig
 	ReadDBConfig() *models.StorageConfig
 	ReadFetcherConfig() *models.FetcherConfig

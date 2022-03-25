@@ -75,7 +75,7 @@ func (ev ExtraFeeSupplied) ToTxLog(chain string) *storage.TxLog {
 // ParseEvent ...
 func (w *Erc20Worker) parseEvent(log *types.Log) (ContractEvent, error) {
 	if bytes.Equal(log.Topics[0][:], ExtraFeeEventHash[:]) {
-		if w.GetChainName() != storage.LaChain {
+		if w.GetChainName() != "LA" {
 			abi, _ := abi.JSON(strings.NewReader(ethBr.EthBrABI))
 			return ParseLAExtraFeeSupplied(&abi, log)
 		}

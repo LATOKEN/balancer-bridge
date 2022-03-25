@@ -18,15 +18,16 @@ func (v *viperConfig) ReadServiceConfig() string {
 
 // ReadLachainConfig reads lachain chain params from config.json
 func (v *viperConfig) ReadLachainConfig() *models.WorkerConfig {
-	return v.readWorkerConfig(storage.LaChain)
+	return v.readWorkerConfig("LA")
 }
 
 // ReadEthWorkerConfig reads ethereum chain worker params from config.json
-func (v *viperConfig) ReadWorkersConfig(chains []string) map[string]*models.WorkerConfig {
-	chainCfgs := make(map[string]*models.WorkerConfig)
+func (v *viperConfig) ReadWorkersConfig() []*models.WorkerConfig {
+	chains := v.GetStringSlice("chains")
+	chainCfgs := make([]*models.WorkerConfig, 0)
 
 	for _, chain := range chains {
-		chainCfgs[chain] = v.readWorkerConfig(chain)
+		chainCfgs = append(chainCfgs, v.readWorkerConfig(chain))
 	}
 
 	return chainCfgs
@@ -86,5 +87,5 @@ func (v *viperConfig) ReadResourceIDs(fetcher *models.FetcherConfig) []*storage.
 }
 
 func (v *viperConfig) ReadChains() []string {
-	return []string{storage.PosChain, storage.BscChain, storage.EthChain, storage.AvaxChain, storage.FtmChain}
+	return v.GetStringSlice("chains")
 }

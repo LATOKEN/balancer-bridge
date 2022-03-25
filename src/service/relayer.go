@@ -29,7 +29,7 @@ type BridgeSRV struct {
 
 // CreateNewBridgeSRV ...
 func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig *models.WorkerConfig,
-	chainCfgs map[string]*models.WorkerConfig, fetCfg *models.FetcherConfig, resourceIDs []*storage.ResourceId) *BridgeSRV {
+	chainCfgs []*models.WorkerConfig, fetCfg *models.FetcherConfig, resourceIDs []*storage.ResourceId) *BridgeSRV {
 	// init database
 	db, err := storage.InitStorage(gormDB)
 	if err != nil {
@@ -44,8 +44,8 @@ func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig *models
 		Workers:  make(map[string]workers.IWorker),
 	}
 	// create erc20 worker
-	for chain, cfg := range chainCfgs {
-		inst.Workers[chain] = eth.NewErc20Worker(logger, cfg)
+	for _, cfg := range chainCfgs {
+		inst.Workers[cfg.ChainName] = eth.NewErc20Worker(logger, cfg)
 	}
 
 	// check rules for workers(>=2, different chainIDs...)
@@ -57,7 +57,7 @@ func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig *models
 	inst.Fetcher = fetcher.CreateNewFetcherSrv(logger, db, fetCfg)
 
 	// create la worker
-	inst.Workers[storage.LaChain] = inst.laWorker
+	inst.Workers["LA"] = inst.laWorker
 
 	db.SaveResourceIDs(resourceIDs)
 	return &inst
@@ -74,7 +74,7 @@ func (r *BridgeSRV) Run() {
 	for _, worker := range r.Workers {
 		go r.ConfirmWorkerTx(worker)
 		go r.CheckTxSentRoutine(worker)
-		if worker.GetChainName() == storage.LaChain {
+		if worker.GetChainName() == "LA" {
 			go r.emitFeeTransfer(worker)
 		}
 	}
