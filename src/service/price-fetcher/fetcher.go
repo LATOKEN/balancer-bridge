@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/latoken/bridge-balancer-service/src/models"
@@ -69,7 +70,8 @@ func (f *FetcherSrv) getPriceInfo() {
 
 				continue
 			} else {
-				price = (*resp)["items"].([]interface{})[0].(map[string]interface{})["price"].(float32)
+				price64, _ := strconv.ParseFloat((*resp)["items"].([]interface{})[0].(map[string]interface{})["price"].(string), 32)
+				price = float32(price64)
 			}
 		}
 
