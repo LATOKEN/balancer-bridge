@@ -41,10 +41,11 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 	// for BSC-USDT decimal conversion
 	tetherRID := r.storage.FetchResourceIDByName("tether").ID
 	bscDestID := r.Workers["BSC"].GetDestinationID()
+	htDestID := r.Workers["HT"].GetDestinationID()
 	var amount string
-	if event.OriginChainID == bscDestID && event.ResourceID == tetherRID {
+	if (event.OriginChainID == bscDestID || event.OriginChainID == htDestID) && event.ResourceID == tetherRID {
 		amount = utils.Convertto6Decimals(event.InAmount)
-	} else if event.DestinationChainID == bscDestID && event.ResourceID == tetherRID {
+	} else if (event.DestinationChainID == bscDestID || event.DestinationChainID == htDestID) && event.ResourceID == tetherRID {
 		amount = utils.Convertto18Decimals(event.InAmount)
 	} else {
 		amount = event.InAmount
