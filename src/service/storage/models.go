@@ -47,6 +47,7 @@ type Event struct {
 	Height             int64
 	Status             EventStatus
 	DepositNonce       uint64
+	SwapID             string
 	CreateTime         int64
 	UpdateTime         int64
 	TxType             string

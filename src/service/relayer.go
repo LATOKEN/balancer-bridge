@@ -105,6 +105,7 @@ func (r *BridgeSRV) ConfirmWorkerTx(worker workers.IWorker) {
 					ResourceID:         txLog.ResourceID,
 					DepositNonce:       txLog.DepositNonce,
 					Height:             txLog.Height,
+					SwapID:             txLog.SwapID,
 					Status:             storage.EventStatusFeeTransferInitConfrimed,
 					CreateTime:         time.Now().Unix(),
 				}
