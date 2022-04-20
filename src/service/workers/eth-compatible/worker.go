@@ -41,7 +41,7 @@ type Erc20Worker struct {
 func NewErc20Worker(logger *logrus.Logger, cfg *models.WorkerConfig) *Erc20Worker {
 	client, err := ethclient.Dial(cfg.Provider)
 	if err != nil {
-		panic("new eth client error")
+		panic(fmt.Sprintf("rpc error for %s : %s", cfg.ChainName, err.Error()))
 	}
 
 	privKey, err := utils.GetPrivateKey(cfg)
@@ -84,7 +84,7 @@ func (w *Erc20Worker) GetChainName() string {
 
 // GetChainName returns chain ID
 func (w *Erc20Worker) GetChainID() string {
-	return string(w.chainID)
+	return fmt.Sprint(w.chainID)
 }
 
 //returns destinationChainID to be checked

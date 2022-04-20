@@ -7,8 +7,6 @@ import (
 	"github.com/latoken/bridge-balancer-service/src/common"
 )
 
-const numPerPage = 100
-
 // Endpoints ...
 func (a *App) Endpoints(w http.ResponseWriter, r *http.Request) {
 	endpoints := struct {
