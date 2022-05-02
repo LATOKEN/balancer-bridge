@@ -16,6 +16,13 @@ func (v *viperConfig) ReadServiceConfig() string {
 	return fmt.Sprintf("%s:%s", v.GetString("service.host"), v.GetString("service.port"))
 }
 
+func (v *viperConfig) ReadAnchorFetcherConfig() *models.AnchorFetcherConfig {
+	return &models.AnchorFetcherConfig{
+		WalletURL: v.GetString("anchorFetcher.WalletURL"),
+		TxListURL: v.GetString("anchorFetcher.TxListURL"),
+	}
+}
+
 // ReadLachainConfig reads lachain chain params from config.json
 func (v *viperConfig) ReadLachainConfig() *models.WorkerConfig {
 	return v.readWorkerConfig("LA")
@@ -36,22 +43,25 @@ func (v *viperConfig) ReadWorkersConfig() []*models.WorkerConfig {
 // readETHWorkerConfig reads ethereum chain worker params from config.json
 func (v *viperConfig) readWorkerConfig(name string) *models.WorkerConfig {
 	return &models.WorkerConfig{
-		NetworkType:        v.GetString(fmt.Sprintf("workers.%s.type", name)),
-		ChainID:            v.GetInt64(fmt.Sprintf("workers.%s.chain_id", name)),
-		ChainName:          strings.ToUpper(name),
-		User:               v.GetString(fmt.Sprintf("workers.%s.user", name)),
-		Password:           v.GetString(fmt.Sprintf("workers.%s.password", name)),
-		WorkerAddr:         common.HexToAddress(v.GetString(fmt.Sprintf("workers.%s.worker_addr", name))),
-		PrivateKey:         v.GetString(fmt.Sprintf("workers.%s.private_key", name)),
-		Provider:           v.GetString(fmt.Sprintf("workers.%s.provider", name)),
-		ContractAddr:       common.HexToAddress(v.GetString(fmt.Sprintf("workers.%s.contract_addr", name))),
-		TokenContractAddr:  common.HexToAddress(v.GetString(fmt.Sprintf("workers.%s.token_addr", name))),
-		GasLimit:           v.GetInt64(fmt.Sprintf("workers.%s.gas_limit", name)),
-		GasPrice:           big.NewInt(v.GetInt64(fmt.Sprintf("workers.%s.gas_price", name))),
-		FetchInterval:      v.GetInt64(fmt.Sprintf("workers.%s.fetch_interval", name)),
-		ConfirmNum:         v.GetInt64(fmt.Sprintf("workers.%s.confirm_num", name)),
-		StartBlockHeight:   v.GetInt64(fmt.Sprintf("workers.%s.start_block_height", name)),
-		DestinationChainID: v.GetString(fmt.Sprintf("workers.%s.dest_id", name)),
+		NetworkType:         v.GetString(fmt.Sprintf("workers.%s.type", name)),
+		ChainID:             v.GetInt64(fmt.Sprintf("workers.%s.chain_id", name)),
+		ChainName:           strings.ToUpper(name),
+		User:                v.GetString(fmt.Sprintf("workers.%s.user", name)),
+		Password:            v.GetString(fmt.Sprintf("workers.%s.password", name)),
+		WorkerAddr:          common.HexToAddress(v.GetString(fmt.Sprintf("workers.%s.worker_addr", name))),
+		PrivateKey:          v.GetString(fmt.Sprintf("workers.%s.private_key", name)),
+		Provider:            v.GetString(fmt.Sprintf("workers.%s.provider", name)),
+		ContractAddr:        common.HexToAddress(v.GetString(fmt.Sprintf("workers.%s.contract_addr", name))),
+		USTContractAddress:  common.HexToAddress(v.GetString(fmt.Sprintf("workers.%s.UST_token_addr", name))),
+		AUSTContractAddress: common.HexToAddress(v.GetString(fmt.Sprintf("workers.%s.AUST_token_addr", name))),
+		AUSTHandlerAddress:  common.HexToAddress(v.GetString(fmt.Sprintf("workers.%s.AUST_handler_addr", name))),
+		TokenContractAddr:   common.HexToAddress(v.GetString(fmt.Sprintf("workers.%s.token_addr", name))),
+		GasLimit:            v.GetInt64(fmt.Sprintf("workers.%s.gas_limit", name)),
+		GasPrice:            big.NewInt(v.GetInt64(fmt.Sprintf("workers.%s.gas_price", name))),
+		FetchInterval:       v.GetInt64(fmt.Sprintf("workers.%s.fetch_interval", name)),
+		ConfirmNum:          v.GetInt64(fmt.Sprintf("workers.%s.confirm_num", name)),
+		StartBlockHeight:    v.GetInt64(fmt.Sprintf("workers.%s.start_block_height", name)),
+		DestinationChainID:  v.GetString(fmt.Sprintf("workers.%s.dest_id", name)),
 	}
 }
 

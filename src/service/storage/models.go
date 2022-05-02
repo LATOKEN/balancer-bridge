@@ -76,3 +76,10 @@ type ResourceId struct {
 	Name string `gorm:"primaryKey"`
 	ID   string `gorm:"type:TEXT"`
 }
+
+type AnchorTx struct {
+	ID         int64  `json:"id" gorm:"primaryKey"`
+	Type       string `json:"type" gorm:"type:TEXT"`
+	AUSTAmount string `json:"aust_amount" gorm:"type:TEXT"`
+	USTAmount  string `json:"ust_amount" gorm:"type:TEXT"`
+}

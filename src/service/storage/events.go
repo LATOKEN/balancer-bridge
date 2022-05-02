@@ -12,10 +12,24 @@ import (
 3. UPDATE event
 */
 
-// GetEventsByTypeAndStatuses ...
-func (d *DataBase) GetEventsByTypeAndStatuses(statuses []EventStatus) []*Event {
+// GetEventsByTypesAndStatuses ...
+func (d *DataBase) GetEventsByTypesAndStatuses(types []TxType, statuses []EventStatus) []*Event {
 	swaps := make([]*Event, 0)
-	if err := d.db.Where("status in (?)", statuses).
+	if err := d.db.Where("status in (?) and tx_type in (?)", statuses, types).
+		Find(&swaps).Error; err != nil {
+		return nil
+	}
+
+	return swaps
+}
+
+// GetConfirmedSwapByResourceIDandAmount ...
+func (d *DataBase) GetConfirmedSwapByResourceIDsAndAmount(resourceIds []ResourceId) {
+	statuses := []EventStatus{EventStatusFeeTransferConfirmed}
+	types := []TxType{TxTypeFeeTransfer}
+
+	swaps := make([]*Event, 0)
+	if err := d.db.Where("status in (?) and tx_type in (?)", statuses, types).
 		Find(&swaps).Error; err != nil {
 		return nil
 	}

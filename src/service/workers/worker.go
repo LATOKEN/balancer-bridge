@@ -16,6 +16,8 @@ type IWorker interface {
 	GetDestinationID() string
 	// GetWokrerAddress returns worker address
 	GetWorkerAddress() string
+	// GetWorkerConfig returns woker config
+	GetWorkerConfig() *models.WorkerConfig
 	// GetStartHeight returns blockchain start height for watcher
 	GetStartHeight() (int64, error)
 	// GetConfirmNum returns numbers of blocks after them tx will be confirmed

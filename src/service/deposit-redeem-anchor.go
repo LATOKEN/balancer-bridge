@@ -12,17 +12,18 @@ import (
 // !!! TODO !!!
 
 // emitRegistreted ...
-func (r *BridgeSRV) emitFeeTransfer(worker workers.IWorker) {
+func (r *BridgeSRV) emitDepositRedeemAnchor(worker workers.IWorker) {
 	for {
-		events := r.storage.GetEventsByTypesAndStatuses([]storage.TxType{storage.TxTypeFeeTransfer}, []storage.EventStatus{storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed})
+		events := r.storage.GetEventsByTypeAndStatuses([]storage.TxType{storage.TxTypeTokenTransfer}, []storage.EventStatus{storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed})
 		for _, event := range events {
-			if event.Status == storage.EventStatusFeeTransferInitConfrimed {
-				r.logger.Infoln("attempting to send fee transfer")
-				if _, err := r.sendFeeTransfer(worker, event); err != nil {
-					r.logger.Errorf("fee transfer failed: %s", err)
+			if event.Status == storage.EventStatusFeeTransferInitConfrimed &&
+				worker.GetDestinationID() == event.DestinationChainID {
+				r.logger.Infoln("attempting to send depositRedeemAnchor")
+				if _, err := r.sendDepositRedeemAnchor(worker, event); err != nil {
+					r.logger.Errorf("depositRedeemAnchor failed: %s", err)
 				}
 			} else {
-				r.handleTxSent(event.ChainID, event, storage.TxTypeFeeTransfer,
+				r.handleTxSent(event.ChainID, event, storage.TxTypeTokenTransfer,
 					storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed)
 			}
 		}
@@ -32,31 +33,19 @@ func (r *BridgeSRV) emitFeeTransfer(worker workers.IWorker) {
 }
 
 // ethSendClaim ...
-func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event) (txHash string, err error) {
+func (r *BridgeSRV) sendDepositRedeemAnchor(worker workers.IWorker, event *storage.Event) (txHash string, err error) {
 	txSent := &storage.TxSent{
 		Chain:      worker.GetChainName(),
-		Type:       storage.TxTypeFeeTransfer,
+		Type:       storage.TxTypeTokenTransfer,
 		CreateTime: time.Now().Unix(),
 	}
-	// for BSC-USDT decimal conversion
-	tetherRID := r.storage.FetchResourceIDByName("tether").ID
 
-	bscDestID := ""
-	if worker, ok := r.Workers["BSC"]; ok {
-		bscDestID = worker.GetDestinationID()
-	}
-	htDestID := ""
-	if worker, ok := r.Workers["HT"]; ok {
-		htDestID = worker.GetDestinationID()
-	}
+	workerCfg := worker.GetWorkerConfig()
+	if event.ReceiverAddr == workerCfg.USTContractAddress.String() {
+		redeemTx := r.storage.GetRedeemedAmount(event.InAmount)
 
-	var amount string
-	if (event.OriginChainID == bscDestID || event.OriginChainID == htDestID) && event.ResourceID == tetherRID {
-		amount = utils.Convertto6Decimals(event.InAmount)
-	} else if (event.DestinationChainID == bscDestID || event.DestinationChainID == htDestID) && event.ResourceID == tetherRID {
-		amount = utils.Convertto18Decimals(event.InAmount)
-	} else {
-		amount = event.InAmount
+		swap := r.storage.GetConfirmedSwapByResourceIDsAndAmount()
+
 	}
 
 	r.logger.Infof("Fee Transfer parameters: outAmount(%s) | recipient(%s) | chainID(%s)\n",

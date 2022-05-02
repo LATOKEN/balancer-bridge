@@ -18,6 +18,7 @@ type Config interface {
 	ReadLachainConfig() *models.WorkerConfig
 	ReadDBConfig() *models.StorageConfig
 	ReadFetcherConfig() *models.FetcherConfig
+	ReadAnchorFetcherConfig() *models.AnchorFetcherConfig
 	ReadResourceIDs(*models.FetcherConfig) []*storage.ResourceId
 	ReadChains() []string
 	GetString(key string) string

@@ -248,18 +248,28 @@ func (w *Erc20Worker) getLogs(curHeight, nextHeight int64) ([]*storage.TxLog, er
 		curHeight = nextHeight - 1
 	}
 
-	logs, err := w.client.FilterLogs(context.Background(), ethereum.FilterQuery{
+	bridgeLogs, err := w.client.FilterLogs(context.Background(), ethereum.FilterQuery{
 		FromBlock: big.NewInt(curHeight + 1),
 		ToBlock:   big.NewInt(nextHeight),
 		// Topics:    topics,
 		Addresses: []common.Address{w.contractAddr},
 		Topics:    [][]common.Hash{},
 	})
+
+	transferLogs, err := w.client.FilterLogs(context.Background(), ethereum.FilterQuery{
+		FromBlock: big.NewInt(curHeight + 1),
+		ToBlock:   big.NewInt(nextHeight),
+		// Topics:    topics,
+		Addresses: []common.Address{w.config.USTContractAddress, w.config.AUSTContractAddress},
+		Topics:    [][]common.Hash{{TokenTransferEventHash}, {}, {w.config.AUSTHandlerAddress.Hash()}},
+	})
+
 	if err != nil {
 		w.logger.WithFields(logrus.Fields{"function": "GetLogs()"}).Errorf("get event log error, err=%s", err)
 		return nil, err
 	}
 
+	logs := append(bridgeLogs, transferLogs...)
 	models := make([]*storage.TxLog, 0, len(logs))
 	for _, log := range logs {
 		w.logger.Infof("WORKER(%s) NEW EVENT: %v\n\n", w.chainName, log)
@@ -367,6 +377,11 @@ func (w *Erc20Worker) EthBalance(address common.Address) (*big.Int, error) {
 // GetWorkerAddress ...
 func (w *Erc20Worker) GetWorkerAddress() string {
 	return w.config.WorkerAddr.String()
+}
+
+// GetWorkerConfig ...
+func (w *Erc20Worker) GetWorkerConfig() *models.WorkerConfig {
+	return w.config
 }
 
 // GetColdWalletAddress ...

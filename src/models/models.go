@@ -80,6 +80,9 @@ type WorkerConfig struct {
 	PrivateKey                     string         `json:"private_key"`
 	Provider                       string         `json:"provider"`
 	ContractAddr                   common.Address `json:"contract_addr"`
+	USTContractAddress             common.Address `json:"UST_token_addr"`
+	AUSTContractAddress            common.Address `json:"AUST_token_addr"`
+	AUSTHandlerAddress             common.Address `json:"AUST_handler_addr"`
 	TokenContractAddr              common.Address `json:"token_contract_addr"`
 	WorkerAddr                     common.Address `json:"worker_addr"`
 	ColdWalletAddr                 common.Address `json:"cold_wallet_addr"`
@@ -107,6 +110,12 @@ type TssConfig struct {
 // RelayerConfig ...
 type RelayerConfig struct {
 	Address common.Address
+}
+
+// AnchorFetcherConfig
+type AnchorFetcherConfig struct {
+	WalletURL string
+	TxListURL string
 }
 
 // // ResourceID

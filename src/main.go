@@ -21,6 +21,7 @@ func main() {
 	laCfg := cfg.ReadLachainConfig()
 	chainCfgs := cfg.ReadWorkersConfig()
 	fetCfg := cfg.ReadFetcherConfig()
+	anchorFetCfg := cfg.ReadAnchorFetcherConfig()
 	dbConfig := cfg.ReadDBConfig()
 	dbURL := fmt.Sprintf(dbConfig.URL, dbConfig.DBHOST, dbConfig.DBPORT, dbConfig.DBUser, dbConfig.DBName, dbConfig.DBPassword, dbConfig.DBSSL)
 	resourceIDs := cfg.ReadResourceIDs(fetCfg)
@@ -63,7 +64,7 @@ func main() {
 		cancel()
 	}()
 
-	app := app.NewApp(logger, srvURL, db, laCfg, chainCfgs, fetCfg, resourceIDs)
+	app := app.NewApp(logger, srvURL, db, laCfg, chainCfgs, fetCfg, anchorFetCfg, resourceIDs)
 
 	//run App
 	app.Run(ctx)

@@ -26,7 +26,8 @@ const (
 type TxType string
 
 const (
-	TxTypeFeeTransfer TxType = "FEE_TRANSFER"
+	TxTypeFeeTransfer   TxType = "FEE_TRANSFER"
+	TxTypeTokenTransfer TxType = "TOKEN_TRANSFER"
 )
 
 type EventStatus string

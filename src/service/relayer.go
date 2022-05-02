@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 
+	anchor "github.com/latoken/bridge-balancer-service/src/service/anchor-fetcher"
 	watcher "github.com/latoken/bridge-balancer-service/src/service/blockchains-watcher"
 	fetcher "github.com/latoken/bridge-balancer-service/src/service/price-fetcher"
 	"github.com/latoken/bridge-balancer-service/src/service/storage"
@@ -19,17 +20,18 @@ import (
 // BridgeSRV ...
 type BridgeSRV struct {
 	sync.RWMutex
-	logger   *logrus.Logger
-	Watcher  *watcher.WatcherSRV
-	laWorker workers.IWorker
-	Workers  map[string]workers.IWorker
-	storage  *storage.DataBase
-	Fetcher  *fetcher.FetcherSrv
+	logger        *logrus.Logger
+	Watcher       *watcher.WatcherSRV
+	laWorker      workers.IWorker
+	Workers       map[string]workers.IWorker
+	storage       *storage.DataBase
+	Fetcher       *fetcher.FetcherSrv
+	AnchorFetcher *anchor.AnchorFetcherSrv
 }
 
 // CreateNewBridgeSRV ...
-func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig *models.WorkerConfig,
-	chainCfgs []*models.WorkerConfig, fetCfg *models.FetcherConfig, resourceIDs []*storage.ResourceId) *BridgeSRV {
+func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig *models.WorkerConfig, chainCfgs []*models.WorkerConfig,
+	fetCfg *models.FetcherConfig, anchorFetCfg *models.AnchorFetcherConfig, resourceIDs []*storage.ResourceId) *BridgeSRV {
 	// init database
 	db, err := storage.InitStorage(gormDB)
 	if err != nil {
@@ -55,6 +57,7 @@ func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig *models
 	}
 	inst.Watcher = watcher.CreateNewWatcherSRV(logger, db, inst.Workers)
 	inst.Fetcher = fetcher.CreateNewFetcherSrv(logger, db, fetCfg)
+	inst.AnchorFetcher = anchor.CreateNewAnchorFetcherSrv(logger, db, anchorFetCfg)
 
 	// create la worker
 	inst.Workers["LA"] = inst.laWorker
@@ -70,6 +73,7 @@ func (r *BridgeSRV) Run() {
 	// start watcher
 	r.Watcher.Run()
 	r.Fetcher.Run()
+	r.AnchorFetcher.Run()
 	// run Worker workers
 	for _, worker := range r.Workers {
 		go r.ConfirmWorkerTx(worker)
@@ -94,9 +98,10 @@ func (r *BridgeSRV) ConfirmWorkerTx(worker workers.IWorker) {
 		newEvents := make([]*storage.Event, 0)
 
 		for _, txLog := range txLogs {
-			if txLog.TxType == storage.TxTypeFeeTransfer {
+			if txLog.TxType == storage.TxTypeFeeTransfer || txLog.TxType == storage.TxTypeTokenTransfer {
 				r.logger.Infoln("New Event")
 				newEvent := &storage.Event{
+					TxType:             string(txLog.TxType),
 					ReceiverAddr:       txLog.ReceiverAddr,
 					ChainID:            txLog.Chain,
 					DestinationChainID: txLog.DestinationChainID,
