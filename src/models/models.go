@@ -69,7 +69,6 @@ type StorageConfig struct {
 // WorkerConfig ...
 type WorkerConfig struct {
 	NetworkType                    string         `json:"type"`
-	ChainID                        int64          `json:"chain_id"`
 	ChainName                      string         `json:"chain_id"`
 	User                           string         `json:"user"`
 	Password                       string         `json:"password"`
