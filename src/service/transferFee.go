@@ -65,7 +65,7 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 		event.DepositNonce, utils.StringToBytes32(event.ResourceID), event.ReceiverAddr, amount)
 	if err != nil {
 		txSent.ErrMsg = err.Error()
-		txSent.Status = storage.TxSentStatusFailed
+		txSent.Status = storage.TxSentStatusNotFound
 		r.storage.UpdateEventStatus(event, storage.EventStatusFeeTransferSentFailed)
 		r.storage.CreateTxSent(txSent)
 		return "", fmt.Errorf("could not send fee transfer tx: %w", err)
