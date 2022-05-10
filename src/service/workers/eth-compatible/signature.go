@@ -44,7 +44,6 @@ func (w *Erc20Worker) CreateSignature(messageHash common.Hash) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	println(messageHash.String())
 	signature, er := crypto.Sign(messageHash.Bytes(), privKey)
 	if er != nil {
 		return "", er
