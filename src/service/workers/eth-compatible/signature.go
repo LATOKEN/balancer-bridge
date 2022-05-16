@@ -1,6 +1,7 @@
 package eth
 
 import (
+	"encoding/binary"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -30,7 +31,7 @@ func (w *Erc20Worker) CreateMessageHash(amount, recipientAddress, destinationCha
 	bytes, err := arguments.Pack(
 		value,
 		common.HexToAddress(recipientAddress),
-		utils.StringToBytes8(destinationChainID),
+		utils.StringToBytes8LeftPad(destinationChainID),
 	)
 	if err != nil {
 		return common.Hash{}, err
@@ -48,6 +49,17 @@ func (w *Erc20Worker) CreateSignature(messageHash common.Hash) (string, error) {
 	if er != nil {
 		return "", er
 	}
-	signature[64] = signature[64] + 35 + byte(w.chainID)*2
-	return hexutil.Encode(signature), nil
+	if w.chainID < 110 {
+		signature[64] = byte(w.chainID)*2 + 35 + signature[64]
+		return hexutil.Encode(signature), nil
+	}
+	result := make([]byte, 66)
+	encodedRecId := uint32(w.chainID)*2 + 35 + uint32(signature[64])
+	recIdBytes := make([]byte, 4)
+	binary.LittleEndian.PutUint32(recIdBytes, encodedRecId)
+	copy(result[0:64], signature[0:64])
+	// only 2 first bytes contains non-zero value because chainId is byte, so it is less than 256
+	result[64] = recIdBytes[1]
+	result[65] = recIdBytes[0]
+	return hexutil.Encode(result), nil
 }

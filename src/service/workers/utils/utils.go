@@ -97,3 +97,9 @@ func CalculateLAAmount(inAmount, LAPrice, otherChainPrice string) *big.Float {
 	ret = ret.Quo(ret, laPr)
 	return ret
 }
+
+func StringToBytes8LeftPad(str string) [8]byte {
+	var byteArr [8]byte
+	copy(byteArr[:], common.LeftPadBytes(common.Hex2Bytes(str), 8))
+	return byteArr
+}
