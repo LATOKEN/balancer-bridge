@@ -40,7 +40,7 @@ func (w *Erc20Worker) CreateMessageHash(amount, recipientAddress, destinationCha
 	return messageHash, nil
 }
 
-func (w *Erc20Worker) CreateSignature(messageHash common.Hash) (string, error) {
+func (w *Erc20Worker) CreateSignature(messageHash common.Hash, destinationChainID string) (string, error) {
 	privKey, err := utils.GetPrivateKey(w.config)
 	if err != nil {
 		return "", err
@@ -49,17 +49,22 @@ func (w *Erc20Worker) CreateSignature(messageHash common.Hash) (string, error) {
 	if er != nil {
 		return "", er
 	}
-	if w.chainID < 110 {
-		signature[64] = byte(w.chainID)*2 + 35 + signature[64]
+	if destinationChainID == w.config.DestinationChainID {
 		return hexutil.Encode(signature), nil
+	} else {
+		if w.chainID < 110 {
+			signature[64] = byte(w.chainID)*2 + 35 + signature[64]
+			return hexutil.Encode(signature), nil
+		}
+		result := make([]byte, 66)
+		encodedRecId := uint32(w.chainID)*2 + 35 + uint32(signature[64])
+		recIdBytes := make([]byte, 4)
+		binary.LittleEndian.PutUint32(recIdBytes, encodedRecId)
+		copy(result[0:64], signature[0:64])
+		// only 2 first bytes contains non-zero value because chainId is byte, so it is less than 256
+		result[64] = recIdBytes[1]
+		result[65] = recIdBytes[0]
+		return hexutil.Encode(result), nil
 	}
-	result := make([]byte, 66)
-	encodedRecId := uint32(w.chainID)*2 + 35 + uint32(signature[64])
-	recIdBytes := make([]byte, 4)
-	binary.LittleEndian.PutUint32(recIdBytes, encodedRecId)
-	copy(result[0:64], signature[0:64])
-	// only 2 first bytes contains non-zero value because chainId is byte, so it is less than 256
-	result[64] = recIdBytes[1]
-	result[65] = recIdBytes[0]
-	return hexutil.Encode(result), nil
+
 }

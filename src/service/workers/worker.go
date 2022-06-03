@@ -38,5 +38,5 @@ type IWorker interface {
 
 	CreateMessageHash(amount, recipientAddress, originChainID string) (common.Hash, error)
 
-	CreateSignature(messageHash common.Hash) (string, error)
+	CreateSignature(messageHash common.Hash, chainId string) (string, error)
 }

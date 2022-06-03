@@ -37,7 +37,7 @@ func (r *BridgeSRV) GetPriceOfToken(name string) (string, error) {
 //Create signature and hash
 func (r *BridgeSRV) CreateSignature(amount, recipientAddress, destinationChainID string) (signature string, err error) {
 	messageHash, err := r.laWorker.CreateMessageHash(amount, recipientAddress, destinationChainID)
-	signature, err = r.laWorker.CreateSignature(messageHash)
+	signature, err = r.laWorker.CreateSignature(messageHash, destinationChainID)
 	if err != nil {
 		return "", err
 	}
