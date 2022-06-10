@@ -105,7 +105,7 @@ func (v *viperConfig) ReadFarmsConfig() map[string]*models.FarmConfig {
 			Logo1:               v.GetString(fmt.Sprintf("farms.%s.logo1", farmId)),
 			DepositResourceID:   v.GetString(fmt.Sprintf("farms.%s.deposit_resource_id", farmId)),
 			WithdrawResourceID:  v.GetString(fmt.Sprintf("farms.%s.withdraw_resource_id", farmId)),
-			Gas:                 v.GetInt64(fmt.Sprintf("farms.%s.withdraw_resource_id", farmId)),
+			Gas:                 v.GetInt64(fmt.Sprintf("farms.%s.gas", farmId)),
 			WrappedTokenAddress: v.GetString(fmt.Sprintf("farms.%s.wrapped_token_address", farmId)),
 		}
 	}
