@@ -9,6 +9,8 @@ import (
 	"time"
 
 	laBr "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/bridge/la"
+	pair "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/pair"
+	vault "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/vault"
 	"github.com/latoken/bridge-balancer-service/src/service/workers/utils"
 
 	"github.com/ethereum/go-ethereum"
@@ -142,6 +144,58 @@ func (w *Erc20Worker) GetStatus() (*models.WorkerStatus, error) {
 	status.Account.Address = w.config.WorkerAddr.Hex()
 
 	return status, nil
+}
+
+// GetVaultInfo returns vault's balance and pricePerFullShare
+func (w *Erc20Worker) GetVaultInfo(vaultAddress common.Address) (*big.Int, *big.Int, error) {
+	instance, err := vault.NewVault(vaultAddress, w.client)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	balance, err := instance.Balance(&bind.CallOpts{
+		Pending: false,
+		Context: nil,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pricePerFullShare, err := instance.GetPricePerFullShare(&bind.CallOpts{
+		Pending: false,
+		Context: nil,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return balance, pricePerFullShare, nil
+}
+
+// GetPairInfo returns pair's totalSupply, reserve0, reserve1
+func (w *Erc20Worker) GetPairInfo(pairAddress common.Address) (*big.Int, *big.Int, *big.Int, error) {
+	instance, err := pair.NewPair(pairAddress, w.client)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	totalSupply, err := instance.TotalSupply(&bind.CallOpts{
+		Pending: false,
+		Context: nil,
+	})
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	reserves, err := instance.GetReserves(&bind.CallOpts{
+		Pending: false,
+		Context: nil,
+	})
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	return totalSupply, reserves.Reserve0, reserves.Reserve1, nil
 }
 
 // // GetStatus returns status of relayer account(balance eg)

@@ -74,6 +74,45 @@ func (v *viperConfig) ReadFetcherConfig() *models.FetcherConfig {
 	}
 }
 
+func (v *viperConfig) ReadFarmerConfig() *models.FarmerConfig {
+	return &models.FarmerConfig{
+		ApyURL:    v.GetString("farmer.apy_url"),
+		LpsURL:    v.GetString("farmer.lps_url"),
+		PricesURL: v.GetString("farmer.prices_url"),
+	}
+}
+
+func (v *viperConfig) ReadFarmsConfig() map[string]*models.FarmConfig {
+	farms := v.GetStringSlice("farms.list")
+	farmsCfgs := make(map[string]*models.FarmConfig)
+
+	for _, farmId := range farms {
+		farmsCfgs[farmId] = &models.FarmConfig{
+			ID:                  farmId,
+			ChainName:           v.GetString(fmt.Sprintf("farms.%s.chain_name", farmId)),
+			Type:                v.GetString(fmt.Sprintf("farms.%s.type", farmId)),
+			FarmId:              v.GetString(fmt.Sprintf("farms.%s.farm_id", farmId)),
+			Oracle:              v.GetString(fmt.Sprintf("farms.%s.oracle", farmId)),
+			VaultAddress:        common.HexToAddress(v.GetString(fmt.Sprintf("farms.%s.vault_address", farmId))),
+			PairAddress:         common.HexToAddress(v.GetString(fmt.Sprintf("farms.%s.pair_address", farmId))),
+			Token0:              v.GetString(fmt.Sprintf("farms.%s.token0", farmId)),
+			Token1:              v.GetString(fmt.Sprintf("farms.%s.token1", farmId)),
+			ChainId:             v.GetString(fmt.Sprintf("farms.%s.chain_id", farmId)),
+			Name:                v.GetString(fmt.Sprintf("farms.%s.name", farmId)),
+			Protocol:            v.GetString(fmt.Sprintf("farms.%s.protocol", farmId)),
+			DepositToken:        v.GetString(fmt.Sprintf("farms.%s.deposit_token", farmId)),
+			Logo0:               v.GetString(fmt.Sprintf("farms.%s.logo0", farmId)),
+			Logo1:               v.GetString(fmt.Sprintf("farms.%s.logo1", farmId)),
+			DepositResourceID:   v.GetString(fmt.Sprintf("farms.%s.deposit_resource_id", farmId)),
+			WithdrawResourceID:  v.GetString(fmt.Sprintf("farms.%s.withdraw_resource_id", farmId)),
+			Gas:                 v.GetInt64(fmt.Sprintf("farms.%s.withdraw_resource_id", farmId)),
+			WrappedTokenAddress: v.GetString(fmt.Sprintf("farms.%s.wrapped_token_address", farmId)),
+		}
+	}
+
+	return farmsCfgs
+}
+
 func (v *viperConfig) ReadResourceIDs(fetcher *models.FetcherConfig) []*storage.ResourceId {
 	resouceIDs := make([]*storage.ResourceId, len(fetcher.AllTokens))
 	for index, name := range fetcher.AllTokens {

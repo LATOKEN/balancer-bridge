@@ -16,6 +16,8 @@ func (a *App) Endpoints(w http.ResponseWriter, r *http.Request) {
 			"/price/{token}",
 			"/status",
 			"signature/{amount}/{recipientAddress}/{destinationChainID}",
+			"/farms/{farmId}/{userBalance}",
+			"/farms",
 			// "/failed_swaps/{page}",
 			// "/resend_tx/{id}",
 			// "/set_mode/{mode}",
@@ -70,4 +72,31 @@ func (a *App) SignatureHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	common.ResponJSON(w, http.StatusOK, signature)
+}
+
+func (a *App) UserFarmBalanceHandler(w http.ResponseWriter, r *http.Request) {
+	farmId := mux.Vars(r)["farmId"]
+	userBalance := mux.Vars(r)["userBalance"]
+
+	if farmId == "" || userBalance == "" {
+		a.logger.Errorf("Empty Request (/farms/{farmId}/{userBalance})")
+		common.ResponJSON(w, http.StatusInternalServerError, createNewError("empty request", ""))
+		return
+	}
+
+	userFarmBalance, err := a.relayer.GetUserFarmBalance(farmId, userBalance)
+	if err != nil {
+		common.ResponError(w, http.StatusInternalServerError, err.Error())
+	}
+
+	common.ResponJSON(w, http.StatusOK, userFarmBalance)
+}
+
+func (a *App) FarmsHandler(w http.ResponseWriter, r *http.Request) {
+	farms, err := a.relayer.GetFarmsInfo()
+	if err != nil {
+		common.ResponError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	common.ResponJSON(w, http.StatusOK, farms)
 }

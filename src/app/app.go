@@ -25,13 +25,14 @@ type App struct {
 
 // NewApp is initializes the app
 func NewApp(logger *logrus.Logger, addr string, db *gorm.DB,
-	laCfg *models.WorkerConfig, chainCfgs []*models.WorkerConfig, fetCfg *models.FetcherConfig, resourceIDs []*storage.ResourceId) *App {
+	laCfg *models.WorkerConfig, chainCfgs []*models.WorkerConfig, fetCfg *models.FetcherConfig,
+	farmerCfg *models.FarmerConfig, farmCfgs map[string]*models.FarmConfig, resourceIDs []*storage.ResourceId) *App {
 	// create new app
 	inst := &App{
 		logger:  logger,
 		router:  mux.NewRouter(),
 		server:  &http.Server{Addr: addr},
-		relayer: rlr.CreateNewBridgeSRV(logger, db, laCfg, chainCfgs, fetCfg, resourceIDs),
+		relayer: rlr.CreateNewBridgeSRV(logger, db, laCfg, chainCfgs, fetCfg, farmerCfg, farmCfgs, resourceIDs),
 	}
 	// set router
 	inst.router = mux.NewRouter()
@@ -57,6 +58,8 @@ func (a *App) setRouters() {
 	a.Get("/status", a.StatusHandler)
 	a.Get("/price/{token}", a.PriceHandler)
 	a.Get("/signature/{amount}/{recipientAddress}/{destinationChainID}", a.SignatureHandler)
+	a.Get("/farms/{farmId}/{userBalance}", a.UserFarmBalanceHandler)
+	a.Get("/farms", a.FarmsHandler)
 	// a.Get("/resend_tx/{id}", a.ResendTxHandler)
 	// a.Get("/set_mode/{mode}", a.SetModeHandler)
 }

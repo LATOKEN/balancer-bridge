@@ -98,6 +98,52 @@ type FetcherConfig struct {
 	AllTokens []string
 }
 
+// FarmInfo ...
+type FarmInfo struct {
+	ID                  string `json:"id"`
+	FarmId              string `json:"farmId"`
+	TVL                 string `json:"tvl"`
+	APY                 string `json:"apy"`
+	ChainId             string `json:"chainId"`
+	Name                string `json:"name"`
+	Protocol            string `json:"protocol"`
+	DepositToken        string `json:"depositToken"`
+	Logo0               string `json:"logo0"`
+	Logo1               string `json:"logo1"`
+	DepositResourceID   string `json:"depositResourceID"`
+	WithdrawResourceID  string `json:"withdrawResourceID"`
+	Gas                 int64  `json:"gas"`
+	WrappedTokenAddress string `json:"wrappedTokenAddress"`
+}
+
+type FarmConfig struct {
+	ID                  string
+	ChainName           string
+	Type                string
+	FarmId              string
+	Oracle              string
+	VaultAddress        common.Address
+	PairAddress         common.Address
+	Token0              string
+	Token1              string
+	ChainId             string
+	Name                string
+	Protocol            string
+	DepositToken        string
+	Logo0               string
+	Logo1               string
+	DepositResourceID   string
+	WithdrawResourceID  string
+	Gas                 int64
+	WrappedTokenAddress string
+}
+
+type FarmerConfig struct {
+	ApyURL    string
+	LpsURL    string
+	PricesURL string
+}
+
 type TssConfig struct {
 	Address    string
 	BaseFolder string

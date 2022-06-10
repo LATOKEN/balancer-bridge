@@ -18,6 +18,8 @@ type Config interface {
 	ReadLachainConfig() *models.WorkerConfig
 	ReadDBConfig() *models.StorageConfig
 	ReadFetcherConfig() *models.FetcherConfig
+	ReadFarmerConfig() *models.FarmerConfig
+	ReadFarmsConfig() map[string]*models.FarmConfig
 	ReadResourceIDs(*models.FetcherConfig) []*storage.ResourceId
 	ReadChains() []string
 	GetString(key string) string

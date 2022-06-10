@@ -1,6 +1,10 @@
 package rlr
 
 import (
+	"fmt"
+	"math"
+	"strconv"
+
 	"github.com/latoken/bridge-balancer-service/src/models"
 )
 
@@ -42,4 +46,70 @@ func (r *BridgeSRV) CreateSignature(amount, recipientAddress, destinationChainID
 		return "", err
 	}
 	return signature, nil
+}
+
+// GetFarmsInfo
+func (r *BridgeSRV) GetUserFarmBalance(farmId, userBalance string) (map[string]string, error) {
+	userFarmBalance := make(map[string]string)
+
+	farmCfg := r.Farmer.FarmCfgs[farmId]
+
+	farmInfo, err := r.storage.GetFarm(farmId)
+	if err != nil {
+		return nil, err
+	}
+
+	pricePerFullShareFloat0, err := strconv.ParseFloat(farmInfo.PricePerFullShare0, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	userBalanceFloat, err := strconv.ParseFloat(userBalance, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	userFarmBalance[farmCfg.Token0] = fmt.Sprintf("%f", pricePerFullShareFloat0*userBalanceFloat/math.Pow(10, 18))
+	if farmCfg.Type != "SINGLE" {
+		pricePerFullShareFloat1, err := strconv.ParseFloat(farmInfo.PricePerFullShare1, 64)
+		if err != nil {
+			return nil, err
+		}
+
+		userFarmBalance[farmCfg.Token1] = fmt.Sprintf("%f", pricePerFullShareFloat1*userBalanceFloat/math.Pow(10, 18))
+	}
+
+	return userFarmBalance, nil
+}
+
+// GetFarmsInfo
+func (r *BridgeSRV) GetFarmsInfo() ([]*models.FarmInfo, error) {
+	farmCfgs := r.Farmer.FarmCfgs
+	farmInfos := make([]*models.FarmInfo, 0, len(farmCfgs))
+
+	for _, farmCfg := range farmCfgs {
+		farmInfo, err := r.storage.GetFarm(farmCfg.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		farmInfos = append(farmInfos, &models.FarmInfo{
+			ID:                  farmCfg.ID,
+			FarmId:              farmCfg.FarmId,
+			TVL:                 farmInfo.TVL,
+			APY:                 farmInfo.APY,
+			ChainId:             farmCfg.ChainId,
+			Name:                farmCfg.Name,
+			Protocol:            farmCfg.Protocol,
+			DepositToken:        farmCfg.DepositToken,
+			Logo0:               farmCfg.Logo0,
+			Logo1:               farmCfg.Logo1,
+			DepositResourceID:   farmCfg.DepositResourceID,
+			WithdrawResourceID:  farmCfg.WithdrawResourceID,
+			Gas:                 farmCfg.Gas,
+			WrappedTokenAddress: farmCfg.WrappedTokenAddress,
+		})
+	}
+
+	return farmInfos, nil
 }

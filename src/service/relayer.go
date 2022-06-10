@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 
+	farmer "github.com/latoken/bridge-balancer-service/src/service/beefy-farmer"
 	watcher "github.com/latoken/bridge-balancer-service/src/service/blockchains-watcher"
 	fetcher "github.com/latoken/bridge-balancer-service/src/service/price-fetcher"
 	"github.com/latoken/bridge-balancer-service/src/service/storage"
@@ -25,11 +26,13 @@ type BridgeSRV struct {
 	Workers  map[string]workers.IWorker
 	storage  *storage.DataBase
 	Fetcher  *fetcher.FetcherSrv
+	Farmer   *farmer.FarmerSrv
 }
 
 // CreateNewBridgeSRV ...
 func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig *models.WorkerConfig,
-	chainCfgs []*models.WorkerConfig, fetCfg *models.FetcherConfig, resourceIDs []*storage.ResourceId) *BridgeSRV {
+	chainCfgs []*models.WorkerConfig, fetCfg *models.FetcherConfig, farmerCfg *models.FarmerConfig,
+	farmCfgs map[string]*models.FarmConfig, resourceIDs []*storage.ResourceId) *BridgeSRV {
 	// init database
 	db, err := storage.InitStorage(gormDB)
 	if err != nil {
@@ -55,6 +58,7 @@ func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig *models
 	}
 	inst.Watcher = watcher.CreateNewWatcherSRV(logger, db, inst.Workers)
 	inst.Fetcher = fetcher.CreateNewFetcherSrv(logger, db, fetCfg)
+	inst.Farmer = farmer.CreateNewFarmerSrv(logger, db, inst.Workers, farmerCfg, farmCfgs)
 
 	// create la worker
 	inst.Workers["LA"] = inst.laWorker
@@ -70,6 +74,7 @@ func (r *BridgeSRV) Run() {
 	// start watcher
 	r.Watcher.Run()
 	r.Fetcher.Run()
+	r.Farmer.Run()
 	// run Worker workers
 	for _, worker := range r.Workers {
 		go r.ConfirmWorkerTx(worker)

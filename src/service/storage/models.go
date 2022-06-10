@@ -72,6 +72,16 @@ type PriceLog struct {
 	UpdateTime int64  `json:"update_time" gorm:"type:BIGINT"`
 }
 
+//Farm
+type Farm struct {
+	ID                 string `json:"id" gorm:"primaryKey"`
+	TVL                string `json:"tvl" gorm:"type:TEXT"`
+	APY                string `json:"apy" gorm:"type:TEXT"`
+	PricePerFullShare0 string `json:"price_per_full_share0" gorm:"type:TEXT"`
+	PricePerFullShare1 string `json:"price_per_full_share1" gorm:"type:TEXT"`
+	UpdateTime         int64  `json:"update_time" gorm:"type:BIGINT"`
+}
+
 type ResourceId struct {
 	Name string `gorm:"primaryKey"`
 	ID   string `gorm:"type:TEXT"`

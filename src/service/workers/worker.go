@@ -1,6 +1,7 @@
 package workers
 
 import (
+	"math/big"
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
@@ -32,6 +33,10 @@ type IWorker interface {
 	IsSameAddress(addrA string, addrB string) bool
 	// GetStatus returns status of relayer: blockchain; account(address, balance ...)
 	GetStatus() (*models.WorkerStatus, error)
+	// GetVaultInfo returns vault's balance and pricePerFullShare
+	GetVaultInfo(vaultAddress common.Address) (*big.Int, *big.Int, error)
+	// GetPairInfo returns pair's totalSupply, reserve0, reserve1
+	GetPairInfo(pairAddress common.Address) (*big.Int, *big.Int, *big.Int, error)
 
 	//TransferExtraFee to be called on lachain side to transfer
 	TransferExtraFee(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string) (string, error)

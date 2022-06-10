@@ -52,6 +52,11 @@ func InitStorage(db *gorm.DB) (*DataBase, error) {
 		return nil, err
 	}
 
+	// migrate table "farmss"
+	if err := db.AutoMigrate(Farm{}).Error; err != nil {
+		return nil, err
+	}
+
 	// migrate table "resource_ids"
 	if err := db.AutoMigrate(ResourceId{}).Error; err != nil {
 		return nil, err
