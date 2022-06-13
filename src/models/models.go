@@ -124,6 +124,7 @@ type FarmConfig struct {
 	Oracle              string
 	VaultAddress        common.Address
 	PairAddress         common.Address
+	WithdrawalFee       float64
 	Token0              string
 	Token1              string
 	ChainId             string

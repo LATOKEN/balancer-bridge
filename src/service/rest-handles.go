@@ -68,15 +68,16 @@ func (r *BridgeSRV) GetUserFarmBalance(farmId, userBalance string) (map[string]s
 	if err != nil {
 		return nil, err
 	}
+	userBalanceFloat -= userBalanceFloat * farmCfg.WithdrawalFee
 
-	userFarmBalance[farmCfg.Token0] = fmt.Sprintf("%f", pricePerFullShareFloat0*userBalanceFloat/math.Pow(10, 18))
+	userFarmBalance[farmCfg.Token0] = fmt.Sprintf("%d", int(pricePerFullShareFloat0*userBalanceFloat/math.Pow(10, 18)))
 	if farmCfg.Type != "SINGLE" {
 		pricePerFullShareFloat1, err := strconv.ParseFloat(farmInfo.PricePerFullShare1, 64)
 		if err != nil {
 			return nil, err
 		}
 
-		userFarmBalance[farmCfg.Token1] = fmt.Sprintf("%f", pricePerFullShareFloat1*userBalanceFloat/math.Pow(10, 18))
+		userFarmBalance[farmCfg.Token1] = fmt.Sprintf("%d", int(pricePerFullShareFloat1*userBalanceFloat/math.Pow(10, 18)))
 	}
 
 	return userFarmBalance, nil

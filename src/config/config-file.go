@@ -95,6 +95,7 @@ func (v *viperConfig) ReadFarmsConfig() map[string]*models.FarmConfig {
 			Oracle:              v.GetString(fmt.Sprintf("farms.%s.oracle", farmId)),
 			VaultAddress:        common.HexToAddress(v.GetString(fmt.Sprintf("farms.%s.vault_address", farmId))),
 			PairAddress:         common.HexToAddress(v.GetString(fmt.Sprintf("farms.%s.pair_address", farmId))),
+			WithdrawalFee:       v.GetFloat64(fmt.Sprintf("farms.%s.withdrawal_fee", farmId)),
 			Token0:              v.GetString(fmt.Sprintf("farms.%s.token0", farmId)),
 			Token1:              v.GetString(fmt.Sprintf("farms.%s.token1", farmId)),
 			ChainId:             v.GetString(fmt.Sprintf("farms.%s.chain_id", farmId)),
