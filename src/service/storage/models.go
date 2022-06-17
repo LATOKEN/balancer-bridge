@@ -76,6 +76,7 @@ type PriceLog struct {
 type Farm struct {
 	ID                 string `json:"id" gorm:"primaryKey"`
 	TVL                string `json:"tvl" gorm:"type:TEXT"`
+	LachainTVL         string `json:"lachain_tvl" gorm:"type:TEXT"`
 	APY                string `json:"apy" gorm:"type:TEXT"`
 	PricePerFullShare0 string `json:"price_per_full_share0" gorm:"type:TEXT"`
 	PricePerFullShare1 string `json:"price_per_full_share1" gorm:"type:TEXT"`

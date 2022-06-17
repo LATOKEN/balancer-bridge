@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/latoken/bridge-balancer-service/src/models"
 	"github.com/latoken/bridge-balancer-service/src/service/storage"
 	"github.com/latoken/bridge-balancer-service/src/service/workers"
@@ -69,10 +70,18 @@ func (f *FarmerSrv) getFarmInfo() {
 		}
 		tvl, _ := strconv.ParseFloat(balance.String(), 64)
 
+		lachainTotalSupply, err := f.Workers["LA"].GetTotalSupply(common.HexToAddress(farmCfg.WrappedTokenAddress))
+		if err != nil {
+			logrus.Warnf("fetch vault info error = %s", err)
+			return
+		}
+		lachainTotalSupplyFloat, _ := strconv.ParseFloat(lachainTotalSupply.String(), 64)
+
 		if farmCfg.Type == "SINGLE" {
 			f.storage.UpsertFarm(&storage.Farm{
 				ID:                 farmCfg.ID,
 				TVL:                fmt.Sprintf("%f", (tvl*(*prices)[farmCfg.Oracle].(float64))/math.Pow(10, 18)),
+				LachainTVL:         fmt.Sprintf("%f", (lachainTotalSupplyFloat*(*prices)[farmCfg.Oracle].(float64))/math.Pow(10, 18)),
 				APY:                fmt.Sprintf("%f", (*apy)[farmCfg.FarmId].(map[string]interface{})["totalApy"].(float64)),
 				PricePerFullShare0: pricePerFullShare.String(),
 				UpdateTime:         time.Now().Unix(),
@@ -88,6 +97,7 @@ func (f *FarmerSrv) getFarmInfo() {
 			f.storage.UpsertFarm(&storage.Farm{
 				ID:                 farmCfg.ID,
 				TVL:                fmt.Sprintf("%f", (tvl*(*lps)[farmCfg.Oracle].(float64))/math.Pow(10, 18)),
+				LachainTVL:         fmt.Sprintf("%f", (lachainTotalSupplyFloat*(*lps)[farmCfg.Oracle].(float64))/math.Pow(10, 18)),
 				APY:                fmt.Sprintf("%f", (*apy)[farmCfg.FarmId].(map[string]interface{})["totalApy"].(float64)),
 				PricePerFullShare0: bigInt.Div(bigInt.Mul(pricePerFullShare, reserve0), totalySupply).String(),
 				PricePerFullShare1: bigInt.Div(bigInt.Mul(pricePerFullShare, reserve1), totalySupply).String(),

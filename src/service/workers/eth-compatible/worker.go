@@ -198,6 +198,24 @@ func (w *Erc20Worker) GetPairInfo(pairAddress common.Address) (*big.Int, *big.In
 	return totalSupply, reserves.Reserve0, reserves.Reserve1, nil
 }
 
+// GetTotalSupply returns token's totalSupply
+func (w *Erc20Worker) GetTotalSupply(tokenAddress common.Address) (*big.Int, error) {
+	instance, err := pair.NewPair(tokenAddress, w.client)
+	if err != nil {
+		return nil, err
+	}
+
+	totalSupply, err := instance.TotalSupply(&bind.CallOpts{
+		Pending: false,
+		Context: nil,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return totalSupply, nil
+}
+
 // // GetStatus returns status of relayer account(balance eg)
 // func (w *Erc20Worker) GetStatus(symbol string) (interface{}, error) {
 // 	ethStatus := &EthStatus{}

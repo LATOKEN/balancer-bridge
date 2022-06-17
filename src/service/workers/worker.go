@@ -37,6 +37,8 @@ type IWorker interface {
 	GetVaultInfo(vaultAddress common.Address) (*big.Int, *big.Int, error)
 	// GetPairInfo returns pair's totalSupply, reserve0, reserve1
 	GetPairInfo(pairAddress common.Address) (*big.Int, *big.Int, *big.Int, error)
+	// GetTotalSupply returns token's totalSupply
+	GetTotalSupply(pairAddress common.Address) (*big.Int, error)
 
 	//TransferExtraFee to be called on lachain side to transfer
 	TransferExtraFee(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string) (string, error)

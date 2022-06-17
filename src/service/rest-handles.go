@@ -98,6 +98,7 @@ func (r *BridgeSRV) GetFarmsInfo() ([]*models.FarmInfo, error) {
 			ID:                  farmCfg.ID,
 			FarmId:              farmCfg.FarmId,
 			TVL:                 farmInfo.TVL,
+			LachainTVL:          farmInfo.LachainTVL,
 			APY:                 farmInfo.APY,
 			ChainId:             farmCfg.ChainId,
 			Name:                farmCfg.Name,

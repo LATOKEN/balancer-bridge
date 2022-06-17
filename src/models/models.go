@@ -103,6 +103,7 @@ type FarmInfo struct {
 	ID                  string `json:"id"`
 	FarmId              string `json:"farmId"`
 	TVL                 string `json:"tvl"`
+	LachainTVL          string `json:"lachainTvl"`
 	APY                 string `json:"apy"`
 	ChainId             string `json:"chainId"`
 	Name                string `json:"name"`
