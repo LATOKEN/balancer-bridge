@@ -2,8 +2,7 @@ package rlr
 
 import (
 	"fmt"
-	"math"
-	"strconv"
+	"math/big"
 
 	"github.com/latoken/bridge-balancer-service/src/models"
 )
@@ -59,25 +58,30 @@ func (r *BridgeSRV) GetUserFarmBalance(farmId, userBalance string) (map[string]s
 		return nil, err
 	}
 
-	pricePerFullShareFloat0, err := strconv.ParseFloat(farmInfo.PricePerFullShare0, 64)
-	if err != nil {
-		return nil, err
-	}
+	pricePerFullShare0, _ := big.NewInt(0).SetString(farmInfo.PricePerFullShare0, 10)
+	withdrawalFee := big.NewRat(1, 1).SetFloat64(1 - farmCfg.WithdrawalFee)
+	userBalanceInt, _ := big.NewInt(0).SetString(userBalance, 10)
+	exp := big.NewInt(0).Exp(big.NewInt(10), big.NewInt(18), nil)
 
-	userBalanceFloat, err := strconv.ParseFloat(userBalance, 64)
-	if err != nil {
-		return nil, err
-	}
-	userBalanceFloat -= userBalanceFloat * farmCfg.WithdrawalFee
+	userBalanceWithFee := big.NewInt(0).Mul(userBalanceInt, withdrawalFee.Num())
+	userBalanceWithFee.Div(userBalanceWithFee, withdrawalFee.Denom())
 
-	userFarmBalance[farmCfg.Token0] = fmt.Sprintf("%d", int(pricePerFullShareFloat0*userBalanceFloat/math.Pow(10, 18)))
+	userBalance0 := big.NewInt(0).Mul(pricePerFullShare0, userBalanceWithFee)
+	userBalance0.Div(userBalance0, exp)
+
+	userFarmBalance[farmCfg.Token0] = fmt.Sprintf("%s", userBalance0.String())
 	if farmCfg.Type != "SINGLE" {
-		pricePerFullShareFloat1, err := strconv.ParseFloat(farmInfo.PricePerFullShare1, 64)
-		if err != nil {
-			return nil, err
-		}
+		pricePerFullShare1, _ := big.NewInt(0).SetString(farmInfo.PricePerFullShare1, 10)
 
-		userFarmBalance[farmCfg.Token1] = fmt.Sprintf("%d", int(pricePerFullShareFloat1*userBalanceFloat/math.Pow(10, 18)))
+		userBalance1 := big.NewInt(0).Mul(pricePerFullShare1, userBalanceWithFee)
+		userBalance1.Div(userBalance1, exp)
+
+		userFarmBalance[farmCfg.Token1] = fmt.Sprintf("%s", userBalance1.String())
+		if farmCfg.Token0 == farmCfg.DepositToken {
+			userFarmBalance["withdrawAmount"] = fmt.Sprintf("%s", userBalance0.Mul(userBalance0, big.NewInt(2)).String())
+		} else {
+			userFarmBalance["withdrawAmount"] = fmt.Sprintf("%s", userBalance1.Mul(userBalance1, big.NewInt(2)).String())
+		}
 	}
 
 	return userFarmBalance, nil
