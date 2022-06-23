@@ -79,9 +79,9 @@ func (r *BridgeSRV) Run() {
 	for _, worker := range r.Workers {
 		go r.ConfirmWorkerTx(worker)
 		go r.CheckTxSentRoutine(worker)
-		if worker.GetChainName() == "LA" {
-			go r.emitFeeTransfer(worker)
-		}
+		// if worker.GetChainName() == "LA" {
+		// 	go r.emitFeeTransfer(worker)
+		// }
 	}
 }
 
