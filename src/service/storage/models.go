@@ -57,6 +57,7 @@ type Event struct {
 type TxSent struct {
 	ID         int64    `json:"id"`
 	Chain      string   `json:"chain" gorm:"type:TEXT"`
+	SwapID     string   `json:"swap_id" gorm:"type:TEXT"`
 	Type       TxType   `json:"type" gorm:"type:tx_types"`
 	TxHash     string   `json:"tx_hash" gorm:"type:TEXT"`
 	ErrMsg     string   `json:"err_msg" gorm:"type:TEXT"`

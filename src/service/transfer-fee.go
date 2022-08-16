@@ -36,6 +36,7 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 	txSent := &storage.TxSent{
 		Chain:      worker.GetChainName(),
 		Type:       storage.TxTypeFeeTransfer,
+		SwapID:     event.SwapID,
 		CreateTime: time.Now().Unix(),
 	}
 	// for BSC-USDT decimal conversion
