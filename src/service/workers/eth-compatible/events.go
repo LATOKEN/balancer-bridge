@@ -26,8 +26,7 @@ const (
 )
 
 var (
-	ExtraFeeSuppliedEventHash = common.HexToHash("0x525223e7c9e63747e47dd4558940766054da3d0378f4006848d2a201545f55a4")
-	ExtraFeeTransferredHash   = common.HexToHash("0x11d9d6d82ced6158185f9c4a4ab3c7768ed3c14cbd759491ca5d2fb42b7935fd")
+	ExtraFeeEventHash = common.HexToHash("0xa111a4bf39fd61f7abcd239236bed67639dd6c74bf937b213b862b51397d65db")
 )
 
 // ExtraFeeSupplied represents a ExtraFeeSupplied event raised by the Bridge.sol contract.
@@ -38,6 +37,8 @@ type ExtraFeeSupplied struct {
 	ResourceID         [32]byte
 	RecipientAddress   common.Address
 	Amount             *big.Int
+	Status             uint8
+	Params             []byte
 	Raw                types.Log // Blockchain specific contextual infos
 }
 
@@ -118,13 +119,13 @@ func (ev ExtraFeeTransferred) ToTxLog(chain string) *storage.TxLog {
 
 // ParseEvent ...
 func (w *Erc20Worker) parseEvent(log *types.Log) (ContractEvent, error) {
-	if bytes.Equal(log.Topics[0][:], ExtraFeeSuppliedEventHash[:]) {
+	if bytes.Equal(log.Topics[0][:], ExtraFeeEventHash[:]) {
 		if w.GetChainName() != "LA" {
 			abi, _ := abi.JSON(strings.NewReader(ethBr.EthBrABI))
 			return ParseETHExtraFeeSupplied(&abi, log)
 		}
 	}
-	if bytes.Equal(log.Topics[0][:], ExtraFeeTransferredHash[:]) {
+	if bytes.Equal(log.Topics[0][:], ExtraFeeEventHash[:]) {
 		if w.GetChainName() == "LA" {
 			abi, _ := abi.JSON(strings.NewReader(laBr.LaBrABI))
 			return ParseLAExtraFeeSupplied(&abi, log)
