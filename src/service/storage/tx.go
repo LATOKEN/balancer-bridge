@@ -83,19 +83,19 @@ func (d *DataBase) ConfirmTx(tx *gorm.DB, txLog *TxLog) error {
 	case TxTypeFeeTransfer:
 		if err := d.UpdateEventStatusWhenConfirmTx(tx, txLog, []EventStatus{
 			EventStatusFeeTransferInit},
-			[]EventStatus{EventStatusFeeTransferInitConfrimed, EventStatusFeeTransferSent, EventStatusFeeTransferSentFailed, EventStatusFeeTransferConfirmed, EventStatusFeeTransferFailed, EventStatusFeeTransferReversed},
+			[]EventStatus{EventStatusFeeTransferSentConfirmed, EventStatusFeeTransferInitConfrimed, EventStatusFeeTransferSent, EventStatusFeeTransferSentFailed, EventStatusFeeTransferConfirmed, EventStatusFeeTransferFailed, EventStatusFeeTransferReversed, EventStatusFeeReversalConfirmed, EventStatusFeeReversalFailed, EventStatusFeeReversalInit, EventStatusFeeReversalSent, EventStatusFeeReversalSentFailed},
 			EventStatusFeeTransferInitConfrimed); err != nil {
 			return err
 		}
 	case TxTypeFeeTransferConfirm:
 		if err := d.UpdateEventStatusWhenConfirmTx(tx, txLog, []EventStatus{
-			EventStatusFeeTransferInit, EventStatusFeeTransferInitConfrimed, EventStatusFeeTransferSent, EventStatusFeeTransferSentFailed, EventStatusFeeTransferConfirmed,
-		}, nil, EventStatusFeeTransferConfirmed); err != nil {
+			EventStatusFeeTransferSentConfirmed, EventStatusFeeTransferInit, EventStatusFeeTransferInitConfrimed, EventStatusFeeTransferSent, EventStatusFeeTransferSentFailed, EventStatusFeeTransferConfirmed, EventStatusFeeReversalFailed, EventStatusFeeReversalInit, EventStatusFeeReversalSentFailed,
+		}, []EventStatus{EventStatusFeeReversalConfirmed, EventStatusFeeReversalSent, EventStatusFeeTransferReversed}, EventStatusFeeTransferConfirmed); err != nil {
 			return err
 		}
 	case TxTypeFeeReversal:
 		if err := d.UpdateEventStatusWhenConfirmTx(tx, txLog, []EventStatus{EventStatusFeeTransferInit, EventStatusFeeTransferInitConfrimed, EventStatusFeeTransferSent, EventStatusFeeTransferSentFailed, EventStatusFeeTransferReversed},
-			[]EventStatus{EventStatusFeeTransferConfirmed}, EventStatusFeeTransferReversed); err != nil {
+			[]EventStatus{EventStatusFeeTransferSentConfirmed, EventStatusFeeTransferConfirmed, EventStatusFeeTransferSent}, EventStatusFeeTransferReversed); err != nil {
 			return err
 		}
 	}

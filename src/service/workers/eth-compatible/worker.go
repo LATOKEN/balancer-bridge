@@ -8,6 +8,7 @@ import (
 	"math/big"
 	"time"
 
+	ethBr "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/bridge/eth"
 	laBr "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/bridge/la"
 	"github.com/latoken/bridge-balancer-service/src/service/workers/utils"
 
@@ -109,6 +110,26 @@ func (w *Erc20Worker) GetConfirmNum() int64 {
 	return w.config.ConfirmNum
 }
 
+// to autobounce extra la tx
+func (w *Erc20Worker) ReversalTx(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, error) {
+	auth, err := w.getTransactor()
+	if err != nil {
+		return "", err
+	}
+	instance, err := ethBr.NewEthBr(w.contractAddr, w.client)
+	if err != nil {
+		return "", err
+	}
+	value, _ := new(big.Int).SetString(amount, 10)
+	tx, err := instance.AutobounceExtraLA(auth, originChainID, destinationChainID, nonce, resourceID, common.HexToAddress(receiptAddr), value, common.Hex2Bytes(data))
+	if err != nil {
+		println(err.Error())
+		return "", err
+	}
+	return tx.Hash().String(), nil
+}
+
+// for extra la tx on lachain
 func (w *Erc20Worker) TransferExtraFee(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, error) {
 	auth, err := w.getTransactor()
 	if err != nil {

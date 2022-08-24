@@ -37,10 +37,17 @@ const (
 	EventStatusFeeTransferInit          EventStatus = "FEE_TRANSFER_INIT"
 	EventStatusFeeTransferInitConfrimed EventStatus = "FEE_TRANSFER_INIT_CONFIRMED"
 	EventStatusFeeTransferSent          EventStatus = "FEE_TRANSFER_SENT"
+	EventStatusFeeTransferSentConfirmed EventStatus = "FEE_TRANSFER_SENT_CONFIRMED"
 	EventStatusFeeTransferConfirmed     EventStatus = "FEE_TRANSFER_CONFIRMED"
 	EventStatusFeeTransferFailed        EventStatus = "FEE_TRANSFER_FAILED"
 	EventStatusFeeTransferSentFailed    EventStatus = "FEE_TRANSFER_SENT_FAILED"
 	EventStatusFeeTransferReversed      EventStatus = "FEE_TRANSFER_REVERSED"
+
+	EventStatusFeeReversalInit       EventStatus = "FEE_REVESAL_INIT"
+	EventStatusFeeReversalSent       EventStatus = "FEE_REVERSAL_SENT"
+	EventStatusFeeReversalSentFailed EventStatus = "FEE_REVERSAL_SENT_FAILED"
+	EventStatusFeeReversalFailed     EventStatus = "FEE_REVERSAL_FAILED"
+	EventStatusFeeReversalConfirmed  EventStatus = "FEE_REVERSAL_CONFIRMED"
 )
 
 // TxLogStatus ...

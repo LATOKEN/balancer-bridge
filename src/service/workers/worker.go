@@ -35,6 +35,7 @@ type IWorker interface {
 
 	//TransferExtraFee to be called on lachain side to transfer
 	TransferExtraFee(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, error)
+	ReversalTx(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, error)
 
 	CreateMessageHash(amount, recipientAddress, originChainID string) (common.Hash, error)
 
