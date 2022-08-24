@@ -15,14 +15,13 @@ type BlockLog struct {
 type TxLog struct {
 	ID                 int64
 	Chain              string `gorm:"type:TEXT"`
-	EventID            string
+	SwapID             string
 	TxType             TxType      `gorm:"type:tx_types"`
 	TxHash             string      `gorm:"type:TEXT"`
 	OriginСhainID      string      `gorm:"type:TEXT"`
 	DestinationChainID string      `gorm:"type:TEXT"`
 	ReceiverAddr       string      `gorm:"type:TEXT"`
 	ResourceID         string      `gorm:"type:TEXT"`
-	SwapID             string      `gorm:"primaryKey"`
 	BlockHash          string      `gorm:"type:TEXT"`
 	Height             int64       `gorm:"type:BIGINT"`
 	Status             TxLogStatus `gorm:"type:tx_log_statuses"`
@@ -31,26 +30,24 @@ type TxLog struct {
 	UpdateTime         int64  `gorm:"type:BIGINT"`
 	DepositNonce       uint64 `gorm:"type:BIGINT"`
 	InAmount           string `gorm:"type:TEXT"`
-	ConfirmedNum       int64  `gorm:"type:BIGINT"`
+	Data               string `gorm:"type:TEXT"`
 }
 
 // Event ...
 type Event struct {
-	EventID            string
-	ChainID            string
-	DestinationChainID string
-	OriginChainID      string
-	ReceiverAddr       string
-	InAmount           string
-	ResourceID         string
-	OutAmount          string
-	Height             int64
-	Status             EventStatus
-	DepositNonce       uint64
-	SwapID             string
-	CreateTime         int64
-	UpdateTime         int64
-	TxType             string
+	SwapID             string      `json:"swap_id" gorm:"primaryKey"`
+	ChainID            string      `json:"chain_id" gorm:"primaryKey"`
+	DestinationChainID string      `json:"destination_chain_id" gorm:"TEXT"`
+	OriginChainID      string      `json:"origin_chain_id" gorm:"TEXT"`
+	ReceiverAddr       string      `json:"receiver_addr" gorm:"TEXT"`
+	InAmount           string      `json:"in_amount" gorm:"TEXT"`
+	ResourceID         string      `json:"resource_id" gorm:"TEXT"`
+	Height             int64       `json:"height" gorm:"BIGINT"`
+	Status             EventStatus `json:"status" gorm:"type:event_statuses"`
+	DepositNonce       uint64      `json:"deposit_nonce" gorm:"BIGINT"`
+	CreateTime         int64       `json:"create_time" gorm:"BIGINT"`
+	UpdateTime         int64       `json:"update_time" gorm:"BIGINT"`
+	Data               string      `json:"data" gorm:"TEXT"`
 }
 
 // TxSent ...
@@ -66,7 +63,7 @@ type TxSent struct {
 	UpdateTime int64    `json:"update_time" gorm:"type:BIGINT"`
 }
 
-//PriceLog...
+// PriceLog...
 type PriceLog struct {
 	Name       string `gorm:"primaryKey"`
 	Price      string `gorm:"type:TEXT"`

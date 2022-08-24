@@ -22,11 +22,12 @@ const (
 
 // !!! TODO !!!
 
-//
 type TxType string
 
 const (
-	TxTypeFeeTransfer TxType = "FEE_TRANSFER"
+	TxTypeFeeTransfer        TxType = "FEE_TRANSFER"
+	TxTypeFeeTransferConfirm TxType = "FEE_TRANSFER_CONFIRM"
+	TxTypeFeeReversal        TxType = "FEE_REVERSAL"
 )
 
 type EventStatus string
@@ -39,6 +40,7 @@ const (
 	EventStatusFeeTransferConfirmed     EventStatus = "FEE_TRANSFER_CONFIRMED"
 	EventStatusFeeTransferFailed        EventStatus = "FEE_TRANSFER_FAILED"
 	EventStatusFeeTransferSentFailed    EventStatus = "FEE_TRANSFER_SENT_FAILED"
+	EventStatusFeeTransferReversed      EventStatus = "FEE_TRANSFER_REVERSED"
 )
 
 // TxLogStatus ...

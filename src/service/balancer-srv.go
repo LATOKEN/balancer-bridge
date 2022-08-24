@@ -94,23 +94,22 @@ func (r *BridgeSRV) ConfirmWorkerTx(worker workers.IWorker) {
 		newEvents := make([]*storage.Event, 0)
 
 		for _, txLog := range txLogs {
-			if txLog.TxType == storage.TxTypeFeeTransfer {
-				r.logger.Infoln("New Event")
-				newEvent := &storage.Event{
-					ReceiverAddr:       txLog.ReceiverAddr,
-					ChainID:            txLog.Chain,
-					DestinationChainID: txLog.DestinationChainID,
-					OriginChainID:      txLog.OriginСhainID,
-					InAmount:           txLog.InAmount,
-					ResourceID:         txLog.ResourceID,
-					DepositNonce:       txLog.DepositNonce,
-					Height:             txLog.Height,
-					SwapID:             txLog.SwapID,
-					Status:             txLog.EventStatus,
-					CreateTime:         time.Now().Unix(),
-				}
-				newEvents = append(newEvents, newEvent)
+			r.logger.Infoln("New Event")
+			newEvent := &storage.Event{
+				ReceiverAddr:       txLog.ReceiverAddr,
+				ChainID:            txLog.Chain,
+				DestinationChainID: txLog.DestinationChainID,
+				OriginChainID:      txLog.OriginСhainID,
+				InAmount:           txLog.InAmount,
+				ResourceID:         txLog.ResourceID,
+				DepositNonce:       txLog.DepositNonce,
+				Height:             txLog.Height,
+				SwapID:             txLog.SwapID,
+				Status:             txLog.EventStatus,
+				Data:               txLog.Data,
+				CreateTime:         time.Now().Unix(),
 			}
+			newEvents = append(newEvents, newEvent)
 			txHashes = append(txHashes, txLog.TxHash)
 		}
 
@@ -150,7 +149,7 @@ func (r *BridgeSRV) CheckTxSent(worker workers.IWorker) {
 }
 
 func (r *BridgeSRV) handleTxSent(chain string, event *storage.Event, txType storage.TxType, backwardStatus storage.EventStatus,
-	failedStatus storage.EventStatus) {
+	failedStatus storage.EventStatus, successStatus storage.EventStatus) {
 	txsSent := r.storage.GetTxsSentByType(chain, txType)
 	if len(txsSent) == 0 {
 		r.storage.UpdateEventStatus(event, backwardStatus)
@@ -161,10 +160,13 @@ func (r *BridgeSRV) handleTxSent(chain string, event *storage.Event, txType stor
 	autoRetryTimeout, autoRetryNum := r.getAutoRetryConfig(chain)
 	txStatus := latestTx.Status
 
+	if txStatus == storage.TxSentStatusSuccess {
+		r.storage.UpdateEventStatus(event, successStatus)
+		return
+	}
 	if timeElapsed > autoRetryTimeout &&
 		(txStatus == storage.TxSentStatusNotFound ||
-			txStatus == storage.TxSentStatusInit ||
-			txStatus == storage.TxSentStatusPending) {
+			txStatus == storage.TxSentStatusInit) {
 
 		if len(txsSent) >= autoRetryNum {
 			r.storage.UpdateEventStatus(event, failedStatus)
@@ -177,16 +179,6 @@ func (r *BridgeSRV) handleTxSent(chain string, event *storage.Event, txType stor
 	}
 }
 
-// !!! TODO !!!
-
 func (r *BridgeSRV) getAutoRetryConfig(chain string) (int64, int) {
-	// if chain == "LA" {
-	// 	autoRetryTimeout = r.Config.ChainConfig.BnbAutoRetryTimeout
-	// 	autoRetryNum = r.Config.ChainConfig.BnbAutoRetryNum
-	// } else {
-	// 	autoRetryTimeout = r.Config.ChainConfig.WorkerChainAutoRetryTimeout
-	// 	autoRetryNum = r.Config.ChainConfig.WorkerChainAutoRetryNum
-	// }
-
-	return 100000, 10
+	return 1000, 1
 }

@@ -8,7 +8,7 @@ import (
 
 // GetConfirmedTxsLog ...
 func (d *DataBase) GetConfirmedTxsLog(chain string, event *Event, tx *gorm.DB) (txLogs []*TxLog, err error) {
-	query := tx.Where("chain = ? and status = ? and event_id = ?", chain, TxStatusConfirmed, event.DepositNonce)
+	query := tx.Where("chain = ? and status = ?", chain, TxStatusConfirmed)
 	if err := query.Order("id desc").Find(&txLogs).Error; err != nil {
 		return txLogs, err
 	}
@@ -45,9 +45,17 @@ func (d *DataBase) ConfirmWorkerTx(chainID string, txLogs []*TxLog, txHashes []s
 
 	// create swap
 	for _, swap := range newEvents {
-		if err := tx.Create(swap).Error; err != nil {
-			tx.Rollback()
-			return err
+		var previousSwap Event
+		if tx.Model(Event{}).Where("swap_id = ?", swap.SwapID).Order("swap_id desc").First(&previousSwap); previousSwap.SwapID == "" {
+			if err := tx.Create(swap).Error; err != nil {
+				tx.Rollback()
+				return err
+			}
+		} else {
+			if err := tx.Model(Event{}).Where("swap_id = ?", swap.SwapID).Update(swap).Error; err != nil {
+				tx.Rollback()
+				return err
+			}
 		}
 	}
 
@@ -74,8 +82,20 @@ func (d *DataBase) ConfirmTx(tx *gorm.DB, txLog *TxLog) error {
 	switch txLog.TxType {
 	case TxTypeFeeTransfer:
 		if err := d.UpdateEventStatusWhenConfirmTx(tx, txLog, []EventStatus{
-			EventStatusFeeTransferInitConfrimed},
-			nil, EventStatusFeeTransferConfirmed); err != nil {
+			EventStatusFeeTransferInit},
+			[]EventStatus{EventStatusFeeTransferInitConfrimed, EventStatusFeeTransferSent, EventStatusFeeTransferSentFailed, EventStatusFeeTransferConfirmed, EventStatusFeeTransferFailed, EventStatusFeeTransferReversed},
+			EventStatusFeeTransferInitConfrimed); err != nil {
+			return err
+		}
+	case TxTypeFeeTransferConfirm:
+		if err := d.UpdateEventStatusWhenConfirmTx(tx, txLog, []EventStatus{
+			EventStatusFeeTransferInit, EventStatusFeeTransferInitConfrimed, EventStatusFeeTransferSent, EventStatusFeeTransferSentFailed, EventStatusFeeTransferConfirmed,
+		}, nil, EventStatusFeeTransferConfirmed); err != nil {
+			return err
+		}
+	case TxTypeFeeReversal:
+		if err := d.UpdateEventStatusWhenConfirmTx(tx, txLog, []EventStatus{EventStatusFeeTransferInit, EventStatusFeeTransferInitConfrimed, EventStatusFeeTransferSent, EventStatusFeeTransferSentFailed, EventStatusFeeTransferReversed},
+			[]EventStatus{EventStatusFeeTransferConfirmed}, EventStatusFeeTransferReversed); err != nil {
 			return err
 		}
 	}

@@ -14,7 +14,7 @@ import (
 // emitRegistreted ...
 func (r *BridgeSRV) emitFeeTransfer(worker workers.IWorker) {
 	for {
-		events := r.storage.GetEventsByTypeAndStatuses([]storage.EventStatus{storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed})
+		events := r.storage.GetEventsByTypeAndStatuses([]storage.EventStatus{storage.EventStatusFeeTransferInit, storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed, storage.EventStatusFeeTransferSent})
 		for _, event := range events {
 			if event.Status == storage.EventStatusFeeTransferInitConfrimed {
 				r.logger.Infoln("attempting to send fee transfer")
@@ -23,7 +23,7 @@ func (r *BridgeSRV) emitFeeTransfer(worker workers.IWorker) {
 				}
 			} else {
 				r.handleTxSent(event.ChainID, event, storage.TxTypeFeeTransfer,
-					storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed)
+					storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferFailed, storage.EventStatusFeeTransferConfirmed)
 			}
 		}
 
@@ -63,7 +63,7 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 	r.logger.Infof("Fee Transfer parameters: outAmount(%s) | recipient(%s) | chainID(%s)\n",
 		amount, event.ReceiverAddr, worker.GetChainName())
 	txHash, err = worker.TransferExtraFee(utils.StringToBytes8(event.OriginChainID), utils.StringToBytes8(event.DestinationChainID),
-		event.DepositNonce, utils.StringToBytes32(event.ResourceID), event.ReceiverAddr, amount)
+		event.DepositNonce, utils.StringToBytes32(event.ResourceID), event.ReceiverAddr, amount, event.Data)
 	if err != nil {
 		txSent.ErrMsg = err.Error()
 		txSent.Status = storage.TxSentStatusNotFound
@@ -78,5 +78,4 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 	r.storage.CreateTxSent(txSent)
 
 	return txSent.TxHash, nil
-
 }
