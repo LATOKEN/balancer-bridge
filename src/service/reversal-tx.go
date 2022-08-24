@@ -11,16 +11,16 @@ import (
 
 func (r *BridgeSRV) emitFeeReversal(wrkr workers.IWorker) {
 	for {
-		events := r.storage.GetEventsByTypeAndStatuses([]storage.EventStatus{storage.EventStatusFeeTransferFailed})
+		events := r.storage.GetEventsByTypeAndStatuses([]storage.EventStatus{storage.EventStatusFeeTransferFailed, storage.EventStatusFeeReversalInit, storage.EventStatusFeeReversalSentFailed, storage.EventStatusFeeReversalSent})
 		for _, event := range events {
-			if event.Status == storage.EventStatusFeeTransferFailed && event.OriginChainID == wrkr.GetDestinationID() {
+			if event.Status == storage.EventStatusFeeReversalInit && event.OriginChainID == wrkr.GetDestinationID() {
 				r.logger.Infoln("attempting to send fee reversal")
 				if _, err := r.sendFeeReversal(wrkr, event); err != nil {
 					r.logger.Errorf("fee reversal failed: %s", err)
 				}
 			} else {
 				r.handleTxSent(event.ChainID, event, storage.TxTypeFeeReversal,
-					storage.EventStatusFeeTransferReversed, storage.EventStatusFeeTransferFailed, storage.EventStatusFeeTransferConfirmed)
+					storage.EventStatusFeeReversalInit, storage.EventStatusFeeReversalFailed, storage.EventStatusFeeTransferSentConfirmed)
 			}
 		}
 
