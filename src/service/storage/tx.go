@@ -94,7 +94,7 @@ func (d *DataBase) ConfirmTx(tx *gorm.DB, txLog *TxLog) error {
 			return err
 		}
 	case TxTypeFeeReversal:
-		if err := d.UpdateEventStatusWhenConfirmTx(tx, txLog, []EventStatus{EventStatusFeeTransferInit, EventStatusFeeTransferInitConfrimed, EventStatusFeeTransferSent, EventStatusFeeTransferSentFailed, EventStatusFeeTransferReversed},
+		if err := d.UpdateEventStatusWhenConfirmTx(tx, txLog, []EventStatus{EventStatusFeeTransferInit, EventStatusFeeTransferInitConfrimed, EventStatusFeeTransferSentFailed, EventStatusFeeTransferReversed},
 			[]EventStatus{EventStatusFeeTransferSentConfirmed, EventStatusFeeTransferConfirmed, EventStatusFeeTransferSent}, EventStatusFeeTransferReversed); err != nil {
 			return err
 		}
@@ -135,9 +135,9 @@ func (d *DataBase) GetTxsSentByStatus(chain string) ([]*TxSent, error) {
 }
 
 // GetTxsSentByType ...
-func (d *DataBase) GetTxsSentByType(chain string, txType TxType) []*TxSent {
+func (d *DataBase) GetTxsSentByType(chain string, txType TxType, swapID string) []*TxSent {
 	txsSent := make([]*TxSent, 0)
-	query := d.db.Where("chain = ? and type = ?", chain, txType)
+	query := d.db.Where("chain = ? and type = ? and swap_id = ?", chain, txType, swapID)
 	query.Order("id desc").Find(&txsSent)
 
 	return txsSent

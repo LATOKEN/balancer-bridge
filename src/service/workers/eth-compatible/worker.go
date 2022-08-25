@@ -260,16 +260,19 @@ func (w *Erc20Worker) GetHeight() (int64, error) {
 
 // GetSentTxStatus ...
 func (w *Erc20Worker) GetSentTxStatus(hash string) storage.TxStatus {
-	_, isPending, err := w.client.TransactionByHash(context.Background(), common.HexToHash(hash))
-	if err != nil {
-		w.logger.Errorln("GetSentTxStatus, err = ", err)
-		return storage.TxSentStatusNotFound
-	}
+	// _, isPending, err := w.client.TransactionByHash(context.Background(), common.HexToHash(hash))
+	// if err != nil {
+	// 	w.logger.Errorln("GetSentTxStatus, err = ", err)
+	// 	return storage.TxSentStatusNotFound
+	// }
 
-	if isPending {
-		return storage.TxSentStatusPending
-	}
+	// if isPending {
+	// 	return storage.TxSentStatusPending
+	// }
 
+	if hash == "" {
+		return storage.TxSentStatusFailed
+	}
 	txReceipt, err := w.client.TransactionReceipt(context.Background(), common.HexToHash(hash))
 	if err != nil {
 		return storage.TxSentStatusNotFound

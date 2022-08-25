@@ -21,12 +21,12 @@ func (r *BridgeSRV) emitFeeTransfer() {
 					r.logger.Errorf("fee transfer failed: %s", err)
 				}
 			} else {
-				r.handleTxSent(event.ChainID, event, storage.TxTypeFeeTransfer,
+				r.handleTxSent(r.laWorker.GetChainName(), event, storage.TxTypeFeeTransfer,
 					storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferFailed, storage.EventStatusFeeTransferSentConfirmed)
 			}
+			time.Sleep(2 * time.Second)
 		}
-
-		time.Sleep(2 * time.Second)
+		time.Sleep(10 * time.Second)
 	}
 }
 

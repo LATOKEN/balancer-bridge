@@ -71,10 +71,10 @@ func (r *BridgeSRV) Run() {
 	r.Watcher.Run()
 	r.Fetcher.Run()
 	// run Worker workers
+	go r.emitFeeTransfer()
 	for _, worker := range r.Workers {
 		go r.ConfirmWorkerTx(worker)
 		go r.CheckTxSentRoutine(worker)
-		go r.emitFeeTransfer()
 		if worker.GetChainName() != "LA" {
 			go r.emitFeeReversal(worker)
 		}
@@ -151,7 +151,7 @@ func (r *BridgeSRV) CheckTxSent(worker workers.IWorker) {
 
 func (r *BridgeSRV) handleTxSent(chain string, event *storage.Event, txType storage.TxType, backwardStatus storage.EventStatus,
 	failedStatus storage.EventStatus, successStatus storage.EventStatus) {
-	txsSent := r.storage.GetTxsSentByType(chain, txType)
+	txsSent := r.storage.GetTxsSentByType(chain, txType, event.SwapID)
 	if len(txsSent) == 0 {
 		r.storage.UpdateEventStatus(event, backwardStatus)
 		return

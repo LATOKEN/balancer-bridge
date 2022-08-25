@@ -25,12 +25,13 @@ type TxLog struct {
 	BlockHash          string      `gorm:"type:TEXT"`
 	Height             int64       `gorm:"type:BIGINT"`
 	Status             TxLogStatus `gorm:"type:tx_log_statuses"`
-	EventStatus        EventStatus
-	CreateTime         int64  `gorm:"type:BIGINT"`
-	UpdateTime         int64  `gorm:"type:BIGINT"`
-	DepositNonce       uint64 `gorm:"type:BIGINT"`
-	InAmount           string `gorm:"type:TEXT"`
-	Data               string `gorm:"type:TEXT"`
+	EventStatus        EventStatus `gorm:"type:TEXT"`
+	ConfirmedNum       uint32      `gorm:"type:BIGINT"`
+	CreateTime         int64       `gorm:"type:BIGINT"`
+	UpdateTime         int64       `gorm:"type:BIGINT"`
+	DepositNonce       uint64      `gorm:"type:BIGINT"`
+	InAmount           string      `gorm:"type:TEXT"`
+	Data               string      `gorm:"type:TEXT"`
 }
 
 // Event ...
@@ -43,7 +44,7 @@ type Event struct {
 	InAmount           string      `json:"in_amount" gorm:"TEXT"`
 	ResourceID         string      `json:"resource_id" gorm:"TEXT"`
 	Height             int64       `json:"height" gorm:"BIGINT"`
-	Status             EventStatus `json:"status" gorm:"type:event_statuses"`
+	Status             EventStatus `json:"status" gorm:"TEXT"`
 	DepositNonce       uint64      `json:"deposit_nonce" gorm:"BIGINT"`
 	CreateTime         int64       `json:"create_time" gorm:"BIGINT"`
 	UpdateTime         int64       `json:"update_time" gorm:"BIGINT"`

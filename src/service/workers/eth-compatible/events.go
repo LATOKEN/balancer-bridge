@@ -53,6 +53,8 @@ func ParseExtraFeeSupplied(abi *abi.ABI, log *types.Log) (ContractEvent, error) 
 	fmt.Printf("amount: %s\n", ev.Amount.String())
 	fmt.Printf("resourceID: %s\n", common.Bytes2Hex(ev.ResourceID[:]))
 	fmt.Printf("nonce: %d\n", ev.DepositNonce)
+	fmt.Printf("status: %d\n", ev.Status)
+	fmt.Printf("params: %s\n", common.Bytes2Hex(ev.Params[:]))
 
 	return ev, nil
 }
