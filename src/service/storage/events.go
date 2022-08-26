@@ -23,6 +23,13 @@ func (d *DataBase) GetEventsByTypeAndStatuses(statuses []EventStatus) []*Event {
 	return swaps
 }
 
+func (d *DataBase) GetEventBySwapID(swapID string) (event Event, err error) {
+	if err := d.db.Model(Event{}).Where("swap_id = ?", swapID).First(&event).Error; err != nil {
+		return event, err
+	}
+	return event, nil
+}
+
 // UpdateEventStatus ...
 func (d *DataBase) UpdateEventStatus(event *Event, status EventStatus) {
 	toUpdate := map[string]interface{}{
