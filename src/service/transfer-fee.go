@@ -1,41 +1,41 @@
-package rlr
+package blcr_srv
 
 import (
 	"fmt"
 	"time"
 
 	"github.com/latoken/bridge-balancer-service/src/service/storage"
-	workers "github.com/latoken/bridge-balancer-service/src/service/workers"
 	"github.com/latoken/bridge-balancer-service/src/service/workers/utils"
 )
 
 // !!! TODO !!!
 
 // emitRegistreted ...
-func (r *BridgeSRV) emitFeeTransfer(worker workers.IWorker) {
+func (r *BridgeSRV) emitFeeTransfer() {
 	for {
-		events := r.storage.GetEventsByTypeAndStatuses([]storage.EventStatus{storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed})
+		events := r.storage.GetEventsByTypeAndStatuses([]storage.EventStatus{storage.EventStatusFeeTransferInit, storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed, storage.EventStatusFeeTransferSent})
 		for _, event := range events {
 			if event.Status == storage.EventStatusFeeTransferInitConfrimed {
 				r.logger.Infoln("attempting to send fee transfer")
-				if _, err := r.sendFeeTransfer(worker, event); err != nil {
+				if _, err := r.sendFeeTransfer(event); err != nil {
 					r.logger.Errorf("fee transfer failed: %s", err)
 				}
 			} else {
-				r.handleTxSent(event.ChainID, event, storage.TxTypeFeeTransfer,
-					storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed)
+				r.handleTxSent(r.laWorker.GetChainName(), event, storage.TxTypeFeeTransfer,
+					storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferFailed, storage.EventStatusFeeTransferSentConfirmed)
 			}
+			time.Sleep(2 * time.Second)
 		}
-
-		time.Sleep(2 * time.Second)
+		time.Sleep(10 * time.Second)
 	}
 }
 
 // ethSendClaim ...
-func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event) (txHash string, err error) {
+func (r *BridgeSRV) sendFeeTransfer(event *storage.Event) (txHash string, err error) {
 	txSent := &storage.TxSent{
-		Chain:      worker.GetChainName(),
+		Chain:      r.laWorker.GetChainName(),
 		Type:       storage.TxTypeFeeTransfer,
+		SwapID:     event.SwapID,
 		CreateTime: time.Now().Unix(),
 	}
 	// for BSC-USDT decimal conversion
@@ -59,10 +59,10 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 		amount = event.InAmount
 	}
 
-	r.logger.Infof("Fee Transfer parameters: outAmount(%s) | recipient(%s) | chainID(%s)\n",
-		amount, event.ReceiverAddr, worker.GetChainName())
-	txHash, err = worker.TransferExtraFee(utils.StringToBytes8(event.OriginChainID), utils.StringToBytes8(event.DestinationChainID),
-		event.DepositNonce, utils.StringToBytes32(event.ResourceID), event.ReceiverAddr, amount)
+	r.logger.Infof("Fee Transfer parameters: outAmount(%s) | recipient(%s)\n",
+		amount, event.ReceiverAddr)
+	txHash, err = r.laWorker.TransferExtraFee(utils.StringToBytes8(event.OriginChainID), utils.StringToBytes8(event.DestinationChainID),
+		event.DepositNonce, utils.StringToBytes32(event.ResourceID), event.ReceiverAddr, amount, event.Data)
 	if err != nil {
 		txSent.ErrMsg = err.Error()
 		txSent.Status = storage.TxSentStatusNotFound
@@ -77,5 +77,4 @@ func (r *BridgeSRV) sendFeeTransfer(worker workers.IWorker, event *storage.Event
 	r.storage.CreateTxSent(txSent)
 
 	return txSent.TxHash, nil
-
 }
