@@ -45,6 +45,8 @@ func NewErc20Worker(logger *logrus.Logger, cfg *models.WorkerConfig) *Erc20Worke
 		panic(fmt.Sprintf("rpc error for %s : %s", cfg.ChainName, err.Error()))
 	}
 
+    defer client.Close()
+
 	privKey, err := utils.GetPrivateKey(cfg)
 	if err != nil {
 		panic(fmt.Sprintf("generate private key error, err=%s", err.Error()))
@@ -171,6 +173,8 @@ func (w *Erc20Worker) GetBlockAndTxs(height int64) (*models.BlockAndTxLogs, erro
 		return nil, err
 	}
 
+	defer client.Close()
+
 	clientResp, err := client.HeaderByNumber(context.Background(), nil)
 	if err != nil {
 		w.logger.Errorln("Error while fetching the block header = ", err)
@@ -186,8 +190,6 @@ func (w *Erc20Worker) GetBlockAndTxs(height int64) (*models.BlockAndTxLogs, erro
 		w.logger.Errorf("while getEvents(block number from %d to %d), err = %v", height, clientResp.Number, err)
 		return nil, err
 	}
-
-	client.Close()
 
 	return &models.BlockAndTxLogs{
 		Height:          clientResp.Number.Int64(),
