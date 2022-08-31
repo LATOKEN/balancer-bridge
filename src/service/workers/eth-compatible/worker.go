@@ -45,6 +45,8 @@ func NewErc20Worker(logger *logrus.Logger, cfg *models.WorkerConfig) *Erc20Worke
 		panic(fmt.Sprintf("rpc error for %s : %s", cfg.ChainName, err.Error()))
 	}
 
+    defer client.Close()
+
 	privKey, err := utils.GetPrivateKey(cfg)
 	if err != nil {
 		panic(fmt.Sprintf("generate private key error, err=%s", err.Error()))
