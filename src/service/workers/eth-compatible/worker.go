@@ -8,6 +8,7 @@ import (
 	"math/big"
 	"time"
 
+	ethBr "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/bridge/eth"
 	laBr "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/bridge/la"
 	"github.com/latoken/bridge-balancer-service/src/service/workers/utils"
 
@@ -110,24 +111,42 @@ func (w *Erc20Worker) GetConfirmNum() int64 {
 	return w.config.ConfirmNum
 }
 
-func (w *Erc20Worker) TransferExtraFee(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string) (string, error) {
+// to autobounce extra la tx
+func (w *Erc20Worker) ReversalTx(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, error) {
 	auth, err := w.getTransactor()
 	if err != nil {
 		return "", err
 	}
-
-	instance, err := laBr.NewLaBr(w.contractAddr, w.client)
+	instance, err := ethBr.NewEthBr(w.contractAddr, w.client)
 	if err != nil {
 		return "", err
 	}
 	value, _ := new(big.Int).SetString(amount, 10)
-	tx, err := instance.TransferExtraFee(auth, originChainID, destinationChainID, nonce, resourceID, common.HexToAddress(receiptAddr), value)
+	tx, err := instance.AutobounceExtraLA(auth, originChainID, destinationChainID, nonce, resourceID, common.HexToAddress(receiptAddr), value, common.Hex2Bytes(data))
 	if err != nil {
 		println(err.Error())
 		return "", err
 	}
 	return tx.Hash().String(), nil
+}
 
+// for extra la tx on lachain
+func (w *Erc20Worker) TransferExtraFee(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, error) {
+	auth, err := w.getTransactor()
+	if err != nil {
+		return "", err
+	}
+	instance, err := laBr.NewLaBr(w.contractAddr, w.client)
+	if err != nil {
+		return "", err
+	}
+	value, _ := new(big.Int).SetString(amount, 10)
+	tx, err := instance.TransferExtraFee(auth, originChainID, destinationChainID, nonce, resourceID, common.HexToAddress(receiptAddr), value, common.Hex2Bytes(data))
+	if err != nil {
+		println(err.Error())
+		return "", err
+	}
+	return tx.Hash().String(), nil
 }
 
 // GetStatus returns status of relayer: blockchain; account(address, balance ...)
@@ -144,31 +163,6 @@ func (w *Erc20Worker) GetStatus() (*models.WorkerStatus, error) {
 
 	return status, nil
 }
-
-// // GetStatus returns status of relayer account(balance eg)
-// func (w *Erc20Worker) GetStatus(symbol string) (interface{}, error) {
-// 	ethStatus := &EthStatus{}
-
-// 	allowance, err := w.Allowance(symbol)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	ethStatus.Allowance = QuoBigInt(allowance, GetBigIntForDecimal(w.Config.ChainDecimal)).String()
-
-// 	balance, err := w.Erc20Balance(w.Config.WorkerAddr, symbol)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	ethStatus.Erc20Balance = QuoBigInt(balance, GetBigIntForDecimal(w.Config.ChainDecimal)).String()
-
-// 	ethBalance, err := w.EthBalance(w.Config.WorkerAddr)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	ethStatus.EthBalance = QuoBigInt(ethBalance, GetBigIntForDecimal(18)).String()
-
-// 	return ethStatus, nil
-// }
 
 // GetBlockAndTxs ...
 func (w *Erc20Worker) GetBlockAndTxs(height int64) (*models.BlockAndTxLogs, error) {
@@ -238,9 +232,8 @@ func (w *Erc20Worker) getLogs(curHeight, nextHeight int64) ([]*storage.TxLog, er
 		txLog := event.ToTxLog(w.chainName)
 		txLog.Chain = w.chainName
 		txLog.Height = int64(log.BlockNumber)
-		txLog.EventID = log.TxHash.Hex()
-		txLog.BlockHash = log.BlockHash.Hex()
 		txLog.TxHash = log.TxHash.Hex()
+		txLog.BlockHash = log.BlockHash.Hex()
 		txLog.Status = storage.TxStatusInit
 
 		models = append(models, txLog)
@@ -260,6 +253,11 @@ func (w *Erc20Worker) GetHeight() (int64, error) {
 
 // GetSentTxStatus ...
 func (w *Erc20Worker) GetSentTxStatus(hash string) storage.TxStatus {
+
+	if hash == "" {
+		return storage.TxSentStatusFailed
+	}
+
 	txReceipt, err := w.client.TransactionReceipt(context.Background(), common.HexToHash(hash))
 	if err != nil {
 		_, isPending, err := w.client.TransactionByHash(context.Background(), common.HexToHash(hash))

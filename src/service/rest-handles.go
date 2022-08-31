@@ -1,7 +1,8 @@
-package rlr
+package blcr_srv
 
 import (
 	"github.com/latoken/bridge-balancer-service/src/models"
+	"github.com/latoken/bridge-balancer-service/src/service/storage"
 )
 
 // Status ...
@@ -25,7 +26,7 @@ func (r *BridgeSRV) StatusOfWorkers() (map[string]*models.WorkerStatus, error) {
 	return workers, nil
 }
 
-//GetPriceOfToken
+// GetPriceOfToken
 func (r *BridgeSRV) GetPriceOfToken(name string) (string, error) {
 	priceLog, err := r.storage.GetPriceLog(name)
 	if err != nil {
@@ -34,7 +35,7 @@ func (r *BridgeSRV) GetPriceOfToken(name string) (string, error) {
 	return priceLog.Price, nil
 }
 
-//Create signature and hash
+// Create signature and hash
 func (r *BridgeSRV) CreateSignature(amount, recipientAddress, destinationChainID string) (signature string, err error) {
 	messageHash, err := r.laWorker.CreateMessageHash(amount, recipientAddress, destinationChainID)
 	signature, err = r.laWorker.CreateSignature(messageHash, destinationChainID)
@@ -42,4 +43,16 @@ func (r *BridgeSRV) CreateSignature(amount, recipientAddress, destinationChainID
 		return "", err
 	}
 	return signature, nil
+}
+
+func (r *BridgeSRV) GetSwapStatusByTxHash(txHash string) (status storage.EventStatus, err error) {
+	txLog, err := r.storage.GetTxLogByTxHash(txHash)
+	if err != nil {
+		return "", err
+	}
+	event, err := r.storage.GetEventBySwapID(txLog.SwapID)
+	if err != nil {
+		return "", err
+	}
+	return event.Status, nil
 }

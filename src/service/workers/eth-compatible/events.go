@@ -8,6 +8,7 @@ import (
 
 	"github.com/latoken/bridge-balancer-service/src/service/storage"
 	ethBr "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/bridge/eth"
+	laBr "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/bridge/la"
 	"github.com/latoken/bridge-balancer-service/src/service/workers/utils"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -20,11 +21,11 @@ import (
 ////
 
 const (
-	ExtraFeeEvent = "ExtraFeeSupplied"
+	ExtraFeeSuppliedEvent = "ExtraFeeSupplied"
 )
 
 var (
-	ExtraFeeEventHash = common.HexToHash("0x525223e7c9e63747e47dd4558940766054da3d0378f4006848d2a201545f55a4")
+	ExtraFeeEventHash = common.HexToHash("0xa111a4bf39fd61f7abcd239236bed67639dd6c74bf937b213b862b51397d65db")
 )
 
 // ExtraFeeSupplied represents a ExtraFeeSupplied event raised by the Bridge.sol contract.
@@ -35,12 +36,14 @@ type ExtraFeeSupplied struct {
 	ResourceID         [32]byte
 	RecipientAddress   common.Address
 	Amount             *big.Int
+	Status             uint8
+	Params             []byte
 	Raw                types.Log // Blockchain specific contextual infos
 }
 
-func ParseLAExtraFeeSupplied(abi *abi.ABI, log *types.Log) (ContractEvent, error) {
+func ParseExtraFeeSupplied(abi *abi.ABI, log *types.Log) (ContractEvent, error) {
 	var ev ExtraFeeSupplied
-	if err := abi.UnpackIntoInterface(&ev, ExtraFeeEvent, log.Data); err != nil {
+	if err := abi.UnpackIntoInterface(&ev, ExtraFeeSuppliedEvent, log.Data); err != nil {
 		return nil, err
 	}
 
@@ -50,11 +53,11 @@ func ParseLAExtraFeeSupplied(abi *abi.ABI, log *types.Log) (ContractEvent, error
 	fmt.Printf("amount: %s\n", ev.Amount.String())
 	fmt.Printf("resourceID: %s\n", common.Bytes2Hex(ev.ResourceID[:]))
 	fmt.Printf("nonce: %d\n", ev.DepositNonce)
+	fmt.Printf("status: %d\n", ev.Status)
+	fmt.Printf("params: %s\n", common.Bytes2Hex(ev.Params[:]))
 
 	return ev, nil
 }
-
-// !!! TODO !!!
 
 // ToTxLog ...
 func (ev ExtraFeeSupplied) ToTxLog(chain string) *storage.TxLog {
@@ -68,6 +71,15 @@ func (ev ExtraFeeSupplied) ToTxLog(chain string) *storage.TxLog {
 		ResourceID:         common.Bytes2Hex(ev.ResourceID[:]),
 		SwapID:             utils.CalcutateSwapID(common.Bytes2Hex(ev.OriginChainID[:]), common.Bytes2Hex(ev.DestinationChainID[:]), fmt.Sprint(ev.DepositNonce)),
 		DepositNonce:       ev.DepositNonce,
+		Data:               common.Bytes2Hex(ev.Params[:]),
+		EventStatus:        storage.EventStatusFeeTransferInit,
+	}
+	if ev.Status == uint8(3) {
+		txlog.TxType = storage.TxTypeFeeTransferConfirm
+		txlog.EventStatus = storage.EventStatusFeeTransferConfirmed
+	} else if ev.Status == uint8(4) {
+		txlog.TxType = storage.TxTypeFeeReversal
+		txlog.EventStatus = storage.EventStatusFeeTransferReversed
 	}
 	return txlog
 }
@@ -75,10 +87,13 @@ func (ev ExtraFeeSupplied) ToTxLog(chain string) *storage.TxLog {
 // ParseEvent ...
 func (w *Erc20Worker) parseEvent(log *types.Log) (ContractEvent, error) {
 	if bytes.Equal(log.Topics[0][:], ExtraFeeEventHash[:]) {
+		var contractAbi abi.ABI
 		if w.GetChainName() != "LA" {
-			abi, _ := abi.JSON(strings.NewReader(ethBr.EthBrABI))
-			return ParseLAExtraFeeSupplied(&abi, log)
+			contractAbi, _ = abi.JSON(strings.NewReader(ethBr.EthBrABI))
+		} else {
+			contractAbi, _ = abi.JSON(strings.NewReader(laBr.LaBrABI))
 		}
+		return ParseExtraFeeSupplied(&contractAbi, log)
 	}
 	return nil, nil
 }
