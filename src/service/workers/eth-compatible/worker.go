@@ -264,6 +264,16 @@ func (w *Erc20Worker) GetHeight() (int64, error) {
 func (w *Erc20Worker) GetSentTxStatus(hash string) storage.TxStatus {
 	txReceipt, err := w.client.TransactionReceipt(context.Background(), common.HexToHash(hash))
 	if err != nil {
+		_, isPending, err := w.client.TransactionByHash(context.Background(), common.HexToHash(hash))
+		if err != nil {
+			if err == ethereum.NotFound {
+				return storage.TxSentStatusLost
+			}
+			return storage.TxSentStatusNotFound
+		}
+		if isPending {
+			return storage.TxSentStatusPending
+		}
 		return storage.TxSentStatusNotFound
 	}
 
