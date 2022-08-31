@@ -44,8 +44,6 @@ func NewErc20Worker(logger *logrus.Logger, cfg *models.WorkerConfig) *Erc20Worke
 		panic(fmt.Sprintf("rpc error for %s : %s", cfg.ChainName, err.Error()))
 	}
 
-    defer client.Close()
-
 	privKey, err := utils.GetPrivateKey(cfg)
 	if err != nil {
 		panic(fmt.Sprintf("generate private key error, err=%s", err.Error()))
@@ -70,6 +68,9 @@ func NewErc20Worker(logger *logrus.Logger, cfg *models.WorkerConfig) *Erc20Worke
 	if err != nil {
 		panic("rpc not returning chain id")
 	}
+
+	defer client.Close()
+
 	// init token addresses
 	return &Erc20Worker{
 		chainName:          cfg.ChainName,
@@ -93,7 +94,7 @@ func (w *Erc20Worker) GetChainID() string {
 	return fmt.Sprint(w.chainID)
 }
 
-//returns destinationChainID to be checked
+// returns destinationChainID to be checked
 func (w *Erc20Worker) GetDestinationID() string {
 	return w.destinationChainID
 }
@@ -173,68 +174,29 @@ func (w *Erc20Worker) GetStatus() (*models.WorkerStatus, error) {
 
 // GetBlockAndTxs ...
 func (w *Erc20Worker) GetBlockAndTxs(height int64) (*models.BlockAndTxLogs, error) {
-	// var head *Header
-	// rpcClient := jsonrpc.NewClient(w.provider)
-
-	// resp, err := rpcClient.Call("eth_getBlockByNumber", "latest", false)
-	// if err != nil {
-	// 	w.logger.Errorln("while call eth_getBlockByNumber, err = ", err)
-	// 	return nil, err
-	// }
-
-	// if err := resp.GetObject(&head); err != nil {
-	// 	w.logger.Errorln("while GetObject, err = ", err)
-	// 	return nil, err
-	// }
-
-	// if head == nil {
-	// 	return nil, fmt.Errorf("not found")
-	// }
-
-	// if height >= int64(head.Number) {
-	// 	return nil, fmt.Errorf("not found")
-	// }
-
-	// logs, err := w.getLogs(height, int64(head.Number))
-	// if err != nil {
-	// 	w.logger.Errorf("while getEvents(from = %d, to = %d), err = %v", height, int64(head.Number), err)
-	// 	return nil, err
-	// }
-
-	// return &models.BlockAndTxLogs{
-	// 	Height:          int64(head.Number),
-	// 	BlockHash:       head.Hash.String(),
-	// 	ParentBlockHash: head.ParentHash.Hex(),
-	// 	BlockTime:       int64(head.Time),
-	// 	TxLogs:          logs,
-	// }, nil
-
-	client, err := ethclient.Dial(w.provider)
-	if err != nil {
-		w.logger.Errorln("Error while dialing the client = ", err)
-		return nil, err
-	}
-
-	defer client.Close()
-
-	clientResp, err := client.HeaderByNumber(context.Background(), nil)
+	clientResp, err := w.client.HeaderByNumber(context.Background(), nil)
 	if err != nil {
 		w.logger.Errorln("Error while fetching the block header = ", err)
 		return nil, err
 	}
 
-	if height >= clientResp.Number.Int64() {
+	nextHeight := clientResp.Number.Int64()
+	if height >= nextHeight {
 		return nil, fmt.Errorf("not found")
+	} else if height == 0 {
+		height = nextHeight - 1
+	} else if nextHeight-height >= 100 {
+		nextHeight = height + 20
 	}
 
-	logs, err := w.getLogs(height, clientResp.Number.Int64())
+	logs, err := w.getLogs(height, nextHeight)
 	if err != nil {
-		w.logger.Errorf("while getEvents(block number from %d to %d), err = %v", height, clientResp.Number, err)
+		w.logger.Errorf("while getEvents(block number from %d to %d), err = %v", height, nextHeight, err)
 		return nil, err
 	}
 
 	return &models.BlockAndTxLogs{
-		Height:          clientResp.Number.Int64(),
+		Height:          nextHeight,
 		BlockHash:       clientResp.Hash().String(),
 		ParentBlockHash: clientResp.ParentHash.Hex(),
 		BlockTime:       int64(clientResp.Time),
@@ -250,11 +212,6 @@ func (w *Erc20Worker) GetFetchInterval() time.Duration {
 // getLogs ...
 func (w *Erc20Worker) getLogs(curHeight, nextHeight int64) ([]*storage.TxLog, error) {
 	//	topics := [][]common.Hash{{DepositEventHash, ProposalEventHash, ProposalVoteHash}}
-	if curHeight == 0 {
-		curHeight = nextHeight - 1
-	} else if nextHeight-curHeight >= 100 {
-		nextHeight = curHeight + 100
-	}
 
 	logs, err := w.client.FilterLogs(context.Background(), ethereum.FilterQuery{
 		FromBlock: big.NewInt(curHeight + 1),
@@ -305,16 +262,6 @@ func (w *Erc20Worker) GetHeight() (int64, error) {
 
 // GetSentTxStatus ...
 func (w *Erc20Worker) GetSentTxStatus(hash string) storage.TxStatus {
-	// _, isPending, err := w.client.TransactionByHash(context.Background(), common.HexToHash(hash))
-	// if err != nil {
-	// 	w.logger.Errorln("GetSentTxStatus, err = ", err)
-	// 	return storage.TxSentStatusNotFound
-	// }
-
-	// if isPending {
-	// 	return storage.TxSentStatusPending
-	// }
-
 	txReceipt, err := w.client.TransactionReceipt(context.Background(), common.HexToHash(hash))
 	if err != nil {
 		return storage.TxSentStatusNotFound
