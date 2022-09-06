@@ -165,6 +165,10 @@ func (r *BridgeSRV) handleTxSent(chain string, event *storage.Event, txType stor
 		r.storage.UpdateEventStatus(event, successStatus)
 		return
 	}
+	if txStatus == storage.TxSentStatusFailed {
+		r.storage.UpdateEventStatus(event, failedStatus)
+		return
+	}
 	if timeElapsed > autoRetryTimeout &&
 		(txStatus == storage.TxSentStatusNotFound ||
 			txStatus == storage.TxSentStatusInit) {
@@ -175,8 +179,6 @@ func (r *BridgeSRV) handleTxSent(chain string, event *storage.Event, txType stor
 			r.storage.UpdateEventStatus(event, backwardStatus)
 		}
 		// r.storage.UpdateTxSentStatus(latestTx, storage.TxSentStatusLost)
-	} else if txStatus == storage.TxSentStatusFailed {
-		r.storage.UpdateEventStatus(event, failedStatus)
 	}
 }
 

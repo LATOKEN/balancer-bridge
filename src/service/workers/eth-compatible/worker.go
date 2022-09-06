@@ -45,7 +45,7 @@ func NewErc20Worker(logger *logrus.Logger, cfg *models.WorkerConfig) *Erc20Worke
 		panic(fmt.Sprintf("rpc error for %s : %s", cfg.ChainName, err.Error()))
 	}
 
-    defer client.Close()
+	defer client.Close()
 
 	privKey, err := utils.GetPrivateKey(cfg)
 	if err != nil {
@@ -264,9 +264,9 @@ func (w *Erc20Worker) GetSentTxStatus(hash string) storage.TxStatus {
 	if err != nil {
 		_, isPending, err := w.client.TransactionByHash(context.Background(), common.HexToHash(hash))
 		if err != nil {
-			if err == ethereum.NotFound {
-				return storage.TxSentStatusLost
-			}
+			// if err == ethereum.NotFound {
+			// 	return storage.TxSentStatusLost
+			// }
 			return storage.TxSentStatusNotFound
 		}
 		if isPending {
