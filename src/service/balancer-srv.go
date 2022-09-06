@@ -174,7 +174,7 @@ func (r *BridgeSRV) handleTxSent(chain string, event *storage.Event, txType stor
 		} else {
 			r.storage.UpdateEventStatus(event, backwardStatus)
 		}
-		r.storage.UpdateTxSentStatus(latestTx, storage.TxSentStatusLost)
+		// r.storage.UpdateTxSentStatus(latestTx, storage.TxSentStatusLost)
 	} else if txStatus == storage.TxSentStatusFailed {
 		r.storage.UpdateEventStatus(event, failedStatus)
 	}
