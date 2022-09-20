@@ -1,7 +1,8 @@
-package rlr
+package blcr_srv
 
 import (
 	"github.com/latoken/bridge-balancer-service/src/models"
+	"github.com/latoken/bridge-balancer-service/src/service/storage"
 )
 
 // Status ...
@@ -42,4 +43,16 @@ func (r *BridgeSRV) CreateSignature(amount, recipientAddress, destinationChainID
 		return "", err
 	}
 	return signature, nil
+}
+
+func (r *BridgeSRV) GetSwapStatusByTxHash(txHash string) (status storage.EventStatus, err error) {
+	txLog, err := r.Storage.GetTxLogByTxHash(txHash)
+	if err != nil {
+		return "", err
+	}
+	event, err := r.Storage.GetEventBySwapID(txLog.SwapID)
+	if err != nil {
+		return "", err
+	}
+	return event.Status, nil
 }

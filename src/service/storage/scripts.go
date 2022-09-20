@@ -6,7 +6,7 @@ var (
         BEGIN
             IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'tx_types') THEN
                 CREATE TYPE tx_types AS ENUM
-            ('FEE_TRANSFER');
+            ('FEE_TRANSFER', 'FEE_TRANSFER_CONFIRM', 'FEE_REVERSAL');
             END IF;
         END$$;
     `

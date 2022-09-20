@@ -16,10 +16,8 @@ func (a *App) Endpoints(w http.ResponseWriter, r *http.Request) {
 			"/price/{token}",
 			"/price/{resourceID}?v=2",
 			"/status",
-			"signature/{amount}/{recipientAddress}/{destinationChainID}",
-			// "/failed_swaps/{page}",
-			// "/resend_tx/{id}",
-			// "/set_mode/{mode}",
+			"/signature/{amount}/{recipientAddress}/{destinationChainID}",
+			"/swapstatus/{txHash}",
 		},
 	}
 	common.ResponJSON(w, http.StatusOK, endpoints)
@@ -76,4 +74,21 @@ func (a *App) SignatureHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	common.ResponJSON(w, http.StatusOK, signature)
+}
+
+func (a *App) SwapStatusHandler(w http.ResponseWriter, r *http.Request) {
+	txHash := mux.Vars(r)["txHash"]
+
+	if txHash == "" {
+		a.logger.Errorf("Empty Request (/swapstatus/{txHash})")
+		common.ResponJSON(w, http.StatusInternalServerError, createNewError("empty request", ""))
+		return
+	}
+	status, err := a.relayer.GetSwapStatusByTxHash(txHash)
+	if err != nil {
+		common.ResponError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	common.ResponJSON(w, http.StatusOK, status)
 }

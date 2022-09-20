@@ -58,7 +58,7 @@ func (a *App) setRouters() {
 	a.Get("/status", a.StatusHandler)
 	a.Get("/price/{token}", a.PriceHandler)
 	a.Get("/signature/{amount}/{recipientAddress}/{destinationChainID}", a.SignatureHandler)
-	// a.Get("/resend_tx/{id}", a.ResendTxHandler)
+	a.Get("/swapstatus/{txHash}", a.SwapStatusHandler)
 	// a.Get("/set_mode/{mode}", a.SetModeHandler)
 }
 

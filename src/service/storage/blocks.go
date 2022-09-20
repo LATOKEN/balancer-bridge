@@ -88,3 +88,10 @@ func (d *DataBase) GetCurrentBlockLog(chainID string) (logs BlockLog) {
 	d.db.Where("chain = ?", chainID).Order("height desc").First(&logs)
 	return logs
 }
+
+func (d *DataBase) GetTxLogByTxHash(txHash string) (txLog TxLog, err error) {
+	if err := d.db.Model(TxLog{}).Where("tx_hash = ?", txHash).Order("create_time desc").First(&txLog).Error; err != nil {
+		return txLog, err
+	}
+	return txLog, nil
+}
