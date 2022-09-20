@@ -23,7 +23,7 @@ type BridgeSRV struct {
 	Watcher  *watcher.WatcherSRV
 	laWorker workers.IWorker
 	Workers  map[string]workers.IWorker
-	storage  *storage.DataBase
+	Storage  *storage.DataBase
 	Fetcher  *fetcher.FetcherSrv
 }
 
@@ -39,7 +39,7 @@ func CreateNewBridgeSRV(logger *logrus.Logger, gormDB *gorm.DB, laConfig *models
 	// create Relayer instance
 	inst := BridgeSRV{
 		logger:   logger,
-		storage:  db,
+		Storage:  db,
 		laWorker: eth.NewErc20Worker(logger, laConfig),
 		Workers:  make(map[string]workers.IWorker),
 	}
@@ -83,7 +83,7 @@ func (r *BridgeSRV) Run() {
 // ConfirmWorkerTx ...
 func (r *BridgeSRV) ConfirmWorkerTx(worker workers.IWorker) {
 	for {
-		txLogs, err := r.storage.FindTxLogs(worker.GetChainName(), worker.GetConfirmNum())
+		txLogs, err := r.Storage.FindTxLogs(worker.GetChainName(), worker.GetConfirmNum())
 		if err != nil {
 			r.logger.Errorf("ConfirmWorkerTx(), err = %s", err)
 			time.Sleep(10 * time.Second)
@@ -115,7 +115,7 @@ func (r *BridgeSRV) ConfirmWorkerTx(worker workers.IWorker) {
 		}
 
 		//
-		if err := r.storage.ConfirmWorkerTx(worker.GetChainName(), txLogs, txHashes, newEvents); err != nil {
+		if err := r.Storage.ConfirmWorkerTx(worker.GetChainName(), txLogs, txHashes, newEvents); err != nil {
 			r.logger.Errorf("compensate new swap tx error, err=%s", err)
 		}
 
@@ -133,7 +133,7 @@ func (r *BridgeSRV) CheckTxSentRoutine(worker workers.IWorker) {
 
 // CheckTxSent ...
 func (r *BridgeSRV) CheckTxSent(worker workers.IWorker) {
-	txsSent, err := r.storage.GetTxsSentByStatus(worker.GetChainName())
+	txsSent, err := r.Storage.GetTxsSentByStatus(worker.GetChainName())
 	if err != nil {
 		r.logger.WithFields(logrus.Fields{"function": "CheckTxSent() | GetTxsSentByStatus()"}).Errorln(err)
 		return
@@ -142,7 +142,7 @@ func (r *BridgeSRV) CheckTxSent(worker workers.IWorker) {
 	for _, txSent := range txsSent {
 		// Get status of tx from chain
 		status := worker.GetSentTxStatus(txSent.TxHash)
-		if err := r.storage.UpdateTxSentStatus(txSent, status); err != nil {
+		if err := r.Storage.UpdateTxSentStatus(txSent, status); err != nil {
 			r.logger.WithFields(logrus.Fields{"function": "CheckTxSent() | UpdateTxSentStatus()"}).Errorln(err)
 			return
 		}
@@ -151,9 +151,9 @@ func (r *BridgeSRV) CheckTxSent(worker workers.IWorker) {
 
 func (r *BridgeSRV) handleTxSent(chain string, event *storage.Event, txType storage.TxType, backwardStatus storage.EventStatus,
 	failedStatus storage.EventStatus) {
-	txsSent := r.storage.GetTxsSentByType(chain, txType)
+	txsSent := r.Storage.GetTxsSentByType(chain, txType)
 	if len(txsSent) == 0 {
-		r.storage.UpdateEventStatus(event, backwardStatus)
+		r.Storage.UpdateEventStatus(event, backwardStatus)
 		return
 	}
 	latestTx := txsSent[0]
@@ -166,13 +166,13 @@ func (r *BridgeSRV) handleTxSent(chain string, event *storage.Event, txType stor
 			txStatus == storage.TxSentStatusInit) {
 
 		if len(txsSent) >= autoRetryNum {
-			r.storage.UpdateEventStatus(event, failedStatus)
+			r.Storage.UpdateEventStatus(event, failedStatus)
 		} else {
-			r.storage.UpdateEventStatus(event, backwardStatus)
+			r.Storage.UpdateEventStatus(event, backwardStatus)
 		}
-		// r.storage.UpdateTxSentStatus(latestTx, storage.TxSentStatusLost)
+		// r.Storage.UpdateTxSentStatus(latestTx, Storage.TxSentStatusLost)
 	} else if txStatus == storage.TxSentStatusFailed {
-		r.storage.UpdateEventStatus(event, failedStatus)
+		r.Storage.UpdateEventStatus(event, failedStatus)
 	}
 }
 
