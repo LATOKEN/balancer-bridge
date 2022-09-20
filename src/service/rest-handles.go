@@ -18,23 +18,23 @@ func (r *BridgeSRV) StatusOfWorkers() (map[string]*models.WorkerStatus, error) {
 	}
 
 	for name, w := range workers {
-		blocks := r.storage.GetCurrentBlockLog(name)
+		blocks := r.Storage.GetCurrentBlockLog(name)
 		w.SyncHeight = blocks.Height
 	}
 
 	return workers, nil
 }
 
-//GetPriceOfToken
+// GetPriceOfToken
 func (r *BridgeSRV) GetPriceOfToken(name string) (string, error) {
-	priceLog, err := r.storage.GetPriceLog(name)
+	priceLog, err := r.Storage.GetPriceLog(name)
 	if err != nil {
 		return "", err
 	}
 	return priceLog.Price, nil
 }
 
-//Create signature and hash
+// Create signature and hash
 func (r *BridgeSRV) CreateSignature(amount, recipientAddress, destinationChainID string) (signature string, err error) {
 	messageHash, err := r.laWorker.CreateMessageHash(amount, recipientAddress, destinationChainID)
 	signature, err = r.laWorker.CreateSignature(messageHash, destinationChainID)
