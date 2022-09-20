@@ -11,7 +11,7 @@ import (
 
 func (r *BridgeSRV) emitFeeReversal(wrkr workers.IWorker) {
 	for {
-		events := r.storage.GetEventsByTypeAndStatuses([]storage.EventStatus{storage.EventStatusFeeTransferFailed, storage.EventStatusFeeReversalInit, storage.EventStatusFeeReversalSentFailed, storage.EventStatusFeeReversalSent})
+		events := r.Storage.GetEventsByTypeAndStatuses([]storage.EventStatus{storage.EventStatusFeeTransferFailed, storage.EventStatusFeeReversalInit, storage.EventStatusFeeReversalSentFailed, storage.EventStatusFeeReversalSent})
 		for _, event := range events {
 			if event.Status == storage.EventStatusFeeReversalInit && event.OriginChainID == wrkr.GetDestinationID() {
 				r.logger.Infoln("attempting to send fee reversal")
@@ -43,15 +43,15 @@ func (r *BridgeSRV) sendFeeReversal(wrkr workers.IWorker, event *storage.Event) 
 	if err != nil {
 		txSent.ErrMsg = err.Error()
 		txSent.Status = storage.TxSentStatusNotFound
-		r.storage.UpdateEventStatus(event, storage.EventStatusFeeReversalSentFailed)
-		r.storage.CreateTxSent(txSent)
+		r.Storage.UpdateEventStatus(event, storage.EventStatusFeeReversalSentFailed)
+		r.Storage.CreateTxSent(txSent)
 		return "", fmt.Errorf("could not send fee reversal tx: %w", err)
 	}
 	txSent.TxHash = txHash
-	r.storage.UpdateEventStatus(event, storage.EventStatusFeeReversalSent)
+	r.Storage.UpdateEventStatus(event, storage.EventStatusFeeReversalSent)
 	r.logger.Infof("send fee reversal tx success | recipient=%s, tx_hash=%s", event.ReceiverAddr, txSent.TxHash)
 	// create new tx(claimed)
-	r.storage.CreateTxSent(txSent)
+	r.Storage.CreateTxSent(txSent)
 
 	return txSent.TxHash, nil
 }

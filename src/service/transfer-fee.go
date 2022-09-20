@@ -13,7 +13,7 @@ import (
 // emitRegistreted ...
 func (r *BridgeSRV) emitFeeTransfer() {
 	for {
-		events := r.storage.GetEventsByTypeAndStatuses([]storage.EventStatus{storage.EventStatusFeeTransferInit, storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed, storage.EventStatusFeeTransferSent})
+		events := r.Storage.GetEventsByTypeAndStatuses([]storage.EventStatus{storage.EventStatusFeeTransferInit, storage.EventStatusFeeTransferInitConfrimed, storage.EventStatusFeeTransferSentFailed, storage.EventStatusFeeTransferSent})
 		for _, event := range events {
 			if event.Status == storage.EventStatusFeeTransferInitConfrimed {
 				r.logger.Infoln("attempting to send fee transfer")
@@ -39,7 +39,7 @@ func (r *BridgeSRV) sendFeeTransfer(event *storage.Event) (txHash string, err er
 		CreateTime: time.Now().Unix(),
 	}
 	// for BSC-USDT decimal conversion
-	tetherRID := r.storage.FetchResourceIDByName("tether").ID
+	tetherRID := r.Storage.FetchResourceIDByName("tether").ID
 
 	bscDestID := ""
 	if worker, ok := r.Workers["BSC"]; ok {
@@ -66,15 +66,15 @@ func (r *BridgeSRV) sendFeeTransfer(event *storage.Event) (txHash string, err er
 	if err != nil {
 		txSent.ErrMsg = err.Error()
 		txSent.Status = storage.TxSentStatusNotFound
-		r.storage.UpdateEventStatus(event, storage.EventStatusFeeTransferSentFailed)
-		r.storage.CreateTxSent(txSent)
+		r.Storage.UpdateEventStatus(event, storage.EventStatusFeeTransferSentFailed)
+		r.Storage.CreateTxSent(txSent)
 		return "", fmt.Errorf("could not send fee transfer tx: %w", err)
 	}
 	txSent.TxHash = txHash
-	r.storage.UpdateEventStatus(event, storage.EventStatusFeeTransferSent)
+	r.Storage.UpdateEventStatus(event, storage.EventStatusFeeTransferSent)
 	r.logger.Infof("send fee transfer tx success | recipient=%s, tx_hash=%s", event.ReceiverAddr, txSent.TxHash)
 	// create new tx(claimed)
-	r.storage.CreateTxSent(txSent)
+	r.Storage.CreateTxSent(txSent)
 
 	return txSent.TxHash, nil
 }

@@ -14,6 +14,7 @@ func (a *App) Endpoints(w http.ResponseWriter, r *http.Request) {
 	}{
 		Endpoints: []string{
 			"/price/{token}",
+			"/price/{resourceID}?v=2",
 			"/status",
 			"/signature/{amount}/{recipientAddress}/{destinationChainID}",
 			"/swapstatus/{txHash}",
@@ -36,13 +37,18 @@ func (a *App) PriceHandler(w http.ResponseWriter, r *http.Request) {
 	// 	Name: mux.Vars(r)["token"],
 	// }
 	msg := mux.Vars(r)["token"]
+	v := r.URL.Query().Get("v")
 
 	if msg == "" {
-		a.logger.Errorf("Empty request(price/{token})")
+		a.logger.Errorf("Empty request(price)")
 		common.ResponJSON(w, http.StatusInternalServerError, createNewError("empty request", ""))
 		return
 	}
 
+	if v == "2" {
+		rID := a.relayer.Storage.FetchResourceID(msg)
+		msg = rID.Name
+	}
 	price, err := a.relayer.GetPriceOfToken(msg)
 	if err != nil {
 		common.ResponError(w, http.StatusInternalServerError, err.Error())
