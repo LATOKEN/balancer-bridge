@@ -38,7 +38,7 @@ func (r *BridgeSRV) sendFeeReversal(wrkr workers.IWorker, event *storage.Event) 
 
 	r.logger.Infof("Fee Reversal parameters: outAmount(%s) | recipient(%s)\n",
 		event.InAmount, event.ReceiverAddr)
-	txHash, err := wrkr.ReversalTx(utils.StringToBytes8(event.OriginChainID), utils.StringToBytes8(event.DestinationChainID),
+	txHash, nonce, err := wrkr.ReversalTx(utils.StringToBytes8(event.OriginChainID), utils.StringToBytes8(event.DestinationChainID),
 		event.DepositNonce, utils.StringToBytes32(event.ResourceID), event.ReceiverAddr, event.InAmount, event.Data)
 	if err != nil {
 		txSent.ErrMsg = err.Error()
@@ -48,6 +48,7 @@ func (r *BridgeSRV) sendFeeReversal(wrkr workers.IWorker, event *storage.Event) 
 		return "", fmt.Errorf("could not send fee reversal tx: %w", err)
 	}
 	txSent.TxHash = txHash
+	txSent.Nonce = nonce
 	r.Storage.UpdateEventStatus(event, storage.EventStatusFeeReversalSent)
 	r.logger.Infof("send fee reversal tx success | recipient=%s, tx_hash=%s", event.ReceiverAddr, txSent.TxHash)
 	// create new tx(claimed)

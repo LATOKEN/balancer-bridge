@@ -61,7 +61,7 @@ func (r *BridgeSRV) sendFeeTransfer(event *storage.Event) (txHash string, err er
 
 	r.logger.Infof("Fee Transfer parameters: outAmount(%s) | recipient(%s)\n",
 		amount, event.ReceiverAddr)
-	txHash, err = r.laWorker.TransferExtraFee(utils.StringToBytes8(event.OriginChainID), utils.StringToBytes8(event.DestinationChainID),
+	txHash, nonce, err := r.laWorker.TransferExtraFee(utils.StringToBytes8(event.OriginChainID), utils.StringToBytes8(event.DestinationChainID),
 		event.DepositNonce, utils.StringToBytes32(event.ResourceID), event.ReceiverAddr, amount, event.Data)
 	if err != nil {
 		txSent.ErrMsg = err.Error()
@@ -71,6 +71,7 @@ func (r *BridgeSRV) sendFeeTransfer(event *storage.Event) (txHash string, err er
 		return "", fmt.Errorf("could not send fee transfer tx: %w", err)
 	}
 	txSent.TxHash = txHash
+	txSent.Nonce = nonce
 	r.Storage.UpdateEventStatus(event, storage.EventStatusFeeTransferSent)
 	r.logger.Infof("send fee transfer tx success | recipient=%s, tx_hash=%s", event.ReceiverAddr, txSent.TxHash)
 	// create new tx(claimed)
