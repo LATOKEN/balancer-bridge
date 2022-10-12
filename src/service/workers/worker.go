@@ -27,15 +27,15 @@ type IWorker interface {
 	// GetFetchInterval returns fetch interval of the chain like average blocking time, it is used in observer
 	GetFetchInterval() time.Duration
 	// GetSentTxStatus returns status of tx sent
-	GetSentTxStatus(hash string) storage.TxStatus
+	GetSentTxStatus(hash string, nonce uint64) storage.TxStatus
 	// IsSameAddress returns is addrA the same with addrB
 	IsSameAddress(addrA string, addrB string) bool
 	// GetStatus returns status of relayer: blockchain; account(address, balance ...)
 	GetStatus() (*models.WorkerStatus, error)
 
 	//TransferExtraFee to be called on lachain side to transfer
-	TransferExtraFee(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, error)
-	ReversalTx(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, error)
+	TransferExtraFee(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, uint64, error)
+	ReversalTx(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, uint64, error)
 
 	CreateMessageHash(amount, recipientAddress, originChainID string) (common.Hash, error)
 
