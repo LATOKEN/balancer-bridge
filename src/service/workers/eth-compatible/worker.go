@@ -6,7 +6,6 @@ import (
 	"crypto/ecdsa"
 	"fmt"
 	"math/big"
-	"strconv"
 	"time"
 
 	ethBr "github.com/latoken/bridge-balancer-service/src/service/workers/eth-compatible/abi/bridge/eth"
@@ -115,41 +114,41 @@ func (w *Erc20Worker) GetConfirmNum() int64 {
 }
 
 // to autobounce extra la tx
-func (w *Erc20Worker) ReversalTx(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, string, error) {
+func (w *Erc20Worker) ReversalTx(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, uint64, error) {
 	auth, err := w.getTransactor()
 	if err != nil {
-		return "", "", err
+		return "", 0, err
 	}
 	instance, err := ethBr.NewEthBr(w.contractAddr, w.client)
 	if err != nil {
-		return "", "", err
+		return "", 0, err
 	}
 	value, _ := new(big.Int).SetString(amount, 10)
 	tx, err := instance.AutobounceExtraLA(auth, originChainID, destinationChainID, nonce, resourceID, common.HexToAddress(receiptAddr), value, common.Hex2Bytes(data))
 	if err != nil {
 		println(err.Error())
-		return "", "", err
+		return "", 0, err
 	}
-	return tx.Hash().String(), auth.Nonce.String(), nil
+	return tx.Hash().String(), auth.Nonce.Uint64(), nil
 }
 
 // for extra la tx on lachain
-func (w *Erc20Worker) TransferExtraFee(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, string, error) {
+func (w *Erc20Worker) TransferExtraFee(originChainID, destinationChainID [8]byte, nonce uint64, resourceID [32]byte, receiptAddr string, amount string, data string) (string, uint64, error) {
 	auth, err := w.getTransactor()
 	if err != nil {
-		return "", "", err
+		return "", 0, err
 	}
 	instance, err := laBr.NewLaBr(w.contractAddr, w.client)
 	if err != nil {
-		return "", "", err
+		return "", 0, err
 	}
 	value, _ := new(big.Int).SetString(amount, 10)
 	tx, err := instance.TransferExtraFee(auth, originChainID, destinationChainID, nonce, resourceID, common.HexToAddress(receiptAddr), value, common.Hex2Bytes(data))
 	if err != nil {
 		println(err.Error())
-		return "", "", err
+		return "", 0, err
 	}
-	return tx.Hash().String(), auth.Nonce.String(), nil
+	return tx.Hash().String(), auth.Nonce.Uint64(), nil
 }
 
 // GetStatus returns status of relayer: blockchain; account(address, balance ...)
@@ -255,7 +254,7 @@ func (w *Erc20Worker) GetHeight() (int64, error) {
 }
 
 // GetSentTxStatus ...
-func (w *Erc20Worker) GetSentTxStatus(hash string, nonce string) storage.TxStatus {
+func (w *Erc20Worker) GetSentTxStatus(hash string, nonce uint64) storage.TxStatus {
 
 	if hash == "" {
 		return storage.TxSentStatusFailed
@@ -263,8 +262,7 @@ func (w *Erc20Worker) GetSentTxStatus(hash string, nonce string) storage.TxStatu
 
 	txReceipt, err := w.client.TransactionReceipt(context.Background(), common.HexToHash(hash))
 	if err != nil {
-		txNonce, err := strconv.ParseUint(nonce, 10, 64)
-		if err != nil {
+		if nonce == 0 {
 			_, isPending, err := w.client.TransactionByHash(context.Background(), common.HexToHash(hash))
 			if err != nil {
 				// if err == ethereum.NotFound {
@@ -279,7 +277,7 @@ func (w *Erc20Worker) GetSentTxStatus(hash string, nonce string) storage.TxStatu
 		}
 
 		txCount, _ := w.GetTxCountLatest()
-		if txNonce >= txCount {
+		if nonce >= txCount {
 			return storage.TxSentStatusPending
 		}
 		return storage.TxSentStatusNotFound
